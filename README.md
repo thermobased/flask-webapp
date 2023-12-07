@@ -19,5 +19,5 @@ pip install -r requirements.txt
 From within python virtualenv:
 
 ```
-flask --app hello run
+flask --app main run
 ```
