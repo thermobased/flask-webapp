@@ -2,7 +2,8 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-@app.route("/login", methods = ["POST"])
+
+@app.route("/login", methods=["POST"])
 def login():
     u = request.form["username"]
     p = request.form["password"]
@@ -10,6 +11,7 @@ def login():
     return f"""
     You entered {u=}, {p=}
     """
+
 
 @app.route("/")
 def hello_world():
