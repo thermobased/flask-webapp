@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
@@ -8,15 +8,16 @@ def login():
     u = request.form["username"]
     p = request.form["password"]
     print(f"{u=} {p=}")
-    return f"""
+    body = f"""
     You entered {u=}, {p=}
     """
+    return render_template("main.html", title="Login page", body=body)
 
 
 @app.route("/")
 def hello_world():
     # hey
-    return """
+    body = """
     <form action="/login" method="post">
         Username:
         <input type="text" id="username" name="username" required>
@@ -29,3 +30,4 @@ def hello_world():
         <input type="submit" value="Login">
     </form>
     """
+    return render_template("main.html", title="Main page", body=body)
