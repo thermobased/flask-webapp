@@ -14,6 +14,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Database
+
+To initialize the database, run the `./create-db.sh` script.
+
 ## Running
 
 From within python virtualenv:
