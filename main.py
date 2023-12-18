@@ -68,7 +68,7 @@ def main():
         <input type="password" id="password" name="password" required>
 
         <br>
-        <input type="submit" value="Login">
+        <input type="submit" value="Register">
     </form>
     """
     return render_template("main.html", title="Main page", body=body)
