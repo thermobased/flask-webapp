@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, make_response
 import sqlite3
 
 app = Flask(__name__)
@@ -36,14 +36,21 @@ def login():
     if i.fetchone() is None:
         body = "Wrong login/password"
     else:
+
         body = f"""
         Login successful, <em> {u} </em>, Welcome!
         """
-    return render_template("main.html", title="Login page", body=body)
+    resp = make_response(render_template("main.html", title="Login page", body=body))
+    resp.set_cookie('authkey', u)
+    return resp
 
+@app.route('/profile')
+def profile():
+ return f"""welcome, <em> {request.cookies.get('authkey')} </em> """
 
 @app.route("/")
 def main():
+    loggedin = request.cookies.get('authkey')
     # hey
     body = """
     Login:
@@ -71,4 +78,6 @@ def main():
         <input type="submit" value="Register">
     </form>
     """
+    if loggedin is not None:
+        return redirect(url_for('profile'))
     return render_template("main.html", title="Main page", body=body)
