@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, make_response
-import sqlite3
+import sqlite3, random, string
 
 app = Flask(__name__)
 
@@ -23,6 +23,11 @@ def register():
     con.commit()
     return redirect(url_for('main'))
 
+def makekey():
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(20))
+    return result_str
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -34,19 +39,49 @@ def login():
         SELECT login FROM items WHERE login = ? and password = ?
         """, (u, p))
     if i.fetchone() is None:
-        body = "Wrong login/password"
+        resp = make_response(redirect(url_for('main')))
     else:
-
-        body = f"""
-        Login successful, <em> {u} </em>, Welcome!
-        """
-    resp = make_response(render_template("main.html", title="Login page", body=body))
-    resp.set_cookie('authkey', u)
+        cookie_key = makekey();
+        cur.execute("INSERT INTO sessions(login, cookie_key) VALUES(?, ?)", (u, cookie_key))
+        resp = make_response(redirect(url_for('profile')))
+        resp.set_cookie('authkey', cookie_key)
     return resp
+
 
 @app.route('/profile')
 def profile():
- return f"""welcome, <em> {request.cookies.get('authkey')} </em> """
+    authkey =  request.cookies.get('authkey')
+    con = get_db()
+    cur = con.cursor()
+    i = cur.execute("""
+                SELECT login FROM sessions WHERE cookie_key = ?
+                """, (authkey,))
+    welcome = i.fetchone()
+    if welcome is not None:
+        body = f"""
+        <h1>Welcome, {welcome[0]}!</h1>
+        <form action="/logout" method="post">
+        <input type="submit" value="Logout">
+        </form>
+         """
+        return render_template("main.html", title="Profile", body=body)
+    else:
+        return redirect(url_for("main"))
+
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    con = get_db()
+    cur = con.cursor()
+    cooka = request.cookies.get('authkey')
+    if cooka is not None:
+        i = cur.execute("SELECT cookie_key FROM sessions WHERE (cookie_key) =?", (cooka, ))
+        if i.fetchone() is not None:
+            cur.execute("DELETE FROM sessions WHERE cookie_key = ?", (cooka, ))
+
+    resp = make_response(redirect(url_for("main")))
+    resp.set_cookie('authkey', 'null')
+    return resp
 
 @app.route("/")
 def main():
@@ -78,6 +113,11 @@ def main():
         <input type="submit" value="Register">
     </form>
     """
-    if loggedin is not None:
+    con = get_db()
+    cur = con.cursor()
+    i = cur.execute("""
+            SELECT cookie_key FROM sessions WHERE cookie_key = ?
+            """, (loggedin, ))
+    if i.fetchone() is not None:
         return redirect(url_for('profile'))
     return render_template("main.html", title="Main page", body=body)
