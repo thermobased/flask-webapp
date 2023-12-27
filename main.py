@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, make_response
 import sqlite3, random, string
+from sqlite3 import IntegrityError
 
 app = Flask(__name__)
 
@@ -19,9 +20,16 @@ def register():
     p = request.form["password"]
     con = get_db()
     cur = con.cursor()
-    cur.execute("INSERT INTO items(login, password) VALUES(?, ?)", (u, p))
-    con.commit()
-    return redirect(url_for('main'))
+    try:
+        cur.execute("INSERT INTO items(login, password) VALUES(?, ?)", (u, p))
+        con.commit()
+        return redirect(url_for('main'))
+    except IntegrityError as e:
+        print("Login already exists, ", e)
+        con.commit()
+        return redirect(url_for('main', error=f"{e}"))
+
+
 
 def makekey():
     letters = string.ascii_lowercase
@@ -66,7 +74,7 @@ def profile():
          """
         return render_template("main.html", title="Profile", body=body)
     else:
-        return redirect(url_for("main"))
+        return redirect(url_for('main'))
 
 
 @app.route("/logout", methods=["POST"])
@@ -83,11 +91,14 @@ def logout():
     resp.set_cookie('authkey', 'null')
     return resp
 
-@app.route("/")
+
+@app.route("/", methods=["GET"])
 def main():
     loggedin = request.cookies.get('authkey')
+    error = f"{request.args.get('error')}"
     # hey
-    body = """
+    body = f"""
+    <div style="color:red">Error: {error}</div>
     Login:
     <form action="/login" method="post">
         Username:
@@ -112,6 +123,8 @@ def main():
         <br>
         <input type="submit" value="Register">
     </form>
+    
+        
     """
     con = get_db()
     cur = con.cursor()
