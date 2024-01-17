@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, make_response
-import sqlite3, random, string
+from jinja2 import Template
+import sqlite3, random, string, hashlib
 from sqlite3 import IntegrityError
 
 app = Flask(__name__)
@@ -18,6 +19,9 @@ def get_db():
 def register():
     u = request.form["username"]
     p = request.form["password"]
+    p = p.encode()
+    p = hashlib.sha256(p)
+    p = p.digest()
     con = get_db()
     cur = con.cursor()
     try:
@@ -41,6 +45,9 @@ def makekey():
 def login():
     u = request.form["username"]
     p = request.form["password"]
+    p = p.encode()
+    p = hashlib.sha256(p)
+    p = p.digest()
     con = get_db()
     cur = con.cursor()
     i = cur.execute("""
@@ -49,7 +56,7 @@ def login():
     if i.fetchone() is None:
         resp = make_response(redirect(url_for('main')))
     else:
-        cookie_key = makekey();
+        cookie_key = makekey()
         cur.execute("INSERT INTO sessions(login, cookie_key) VALUES(?, ?)", (u, cookie_key))
         resp = make_response(redirect(url_for('profile')))
         resp.set_cookie('authkey', cookie_key)
@@ -66,12 +73,8 @@ def profile():
                 """, (authkey,))
     welcome = i.fetchone()
     if welcome is not None:
-        body = f"""
-        <h1>Welcome, {welcome[0]}!</h1>
-        <form action="/logout" method="post">
-        <input type="submit" value="Logout">
-        </form>
-         """
+        body = render_template("welcome.html", name=welcome[0])
+
         return render_template("main.html", title="Profile", body=body)
     else:
         return redirect(url_for('main'))
@@ -134,3 +137,4 @@ def main():
     if i.fetchone() is not None:
         return redirect(url_for('profile'))
     return render_template("main.html", title="Main page", body=body)
+

@@ -3,3 +3,4 @@ venv/
 __pycache__/**
 collection.db
 collection.db-journal
+123.py
