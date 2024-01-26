@@ -1,9 +1,59 @@
-.input-name:focus {
-    box-shadow:0 0 0 10px red;
+
+.header{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
 }
 
-form {
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
+.login_page{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+
+}
+
+.main_info{
+    font-size: 35px;
+    color: darkgreen;
+}
+
+.main_info form{
+    align-self:right;
+    align-items: right;
+    align-content: right;
+    text-align: right;
+}
+
+.logo img{
+    width: 120px;
+    height: 120px;
+    border-width: 10px;
+    border-radius: 45px;
+}
+
+.logged_in .form {
+    color:red;
+}
+
+.login_page {
+    display: flex;
+    justify-content: center;
+}
+
+.habits {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: left;
+
+}
+form.habits {
+
+}
+
+.inline_form{
+    display:inline;
 }

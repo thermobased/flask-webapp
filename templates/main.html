@@ -6,6 +6,39 @@
     <title>{{title}}</title>
 </head>
 <body>
-  {{body|safe}}
+
+<div class="header">
+
+    <div class="logo">
+        <img src="/static/based.png">
+    </div>
+
+    {{header}}
+
+
+    <div class="logged_in">
+
+        {% if name %}
+        <h1>Welcome, {{name}}!</h1>
+        <form action="/logout" method="post">
+            <input type="submit" value="Logout">
+        </form>
+        {% else %}
+        <h1>Not logged in</h1>
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+<div class="body_main">
+
+    <div>
+        {{body|safe}}
+    </div>
+</div>
+
 </body>
 </html>
+
