@@ -13,6 +13,7 @@ def get_db():
     global database
     if database is None:
         database = sqlite3.connect("collection.db", check_same_thread=False)
+        database.execute("PRAGMA foreign_keys = 1")
     return database
 
 
@@ -67,6 +68,7 @@ def login():
 def profile():
     global user
     if request.method == 'GET':
+        error = request.args.get('error')
         authkey = request.cookies.get('authkey')
         con = get_db()
         cur = con.cursor()
@@ -85,20 +87,25 @@ def profile():
             habits[q] = habits[q][0]
 
         if welcome is not None:
-            body = render_template("welcome.html", habits=habits)
+            body = render_template("welcome.html", habits=habits, error=error)
 
             return render_template("main.html", title="Profile", body=body, name=welcome[0])
         else:
             return redirect(url_for('main'))
 
     if request.method == 'POST':
-        new_habit = request.form["new_habit"]
         con = get_db()
         cur = con.cursor()
-        cur.execute("INSERT INTO habits (login, habit, checkmark) VALUES(?, ?, ?)", (user, new_habit, 0))
-        con.commit()
-        resp = redirect(url_for('profile'))
-        return resp
+        new_habit = request.form["new_habit"]
+        try:
+
+            cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
+            con.commit()
+            return redirect(url_for('profile'))
+        except IntegrityError as e:
+            print("habit already exists!, ", e)
+            con.commit()
+            return redirect(url_for('profile', error=f"{e}"))
 
 
 @app.route("/logout", methods=['POST'])
@@ -131,37 +138,8 @@ def delete_habit():
 @app.route("/", methods=["GET"])
 def main():
     logged_in = request.cookies.get('authkey')
-    error = f"{request.args.get('error')}"
-    body = f"""
-    
-    
-    <form action="/login" method="post">
-        Username:
-        <input type="text" id="username" name="username" required>
-
-        <br>
-        Password:
-        <input type="password" id="password" name="password" required>
-
-        <br>
-        <input type="submit" value="Login">
-    </form>
-    
-    <form action="/register" method="post">
-        Username:
-        <input type="text" id="username" name="username" required>
-
-        <br>
-        Password:
-        <input type="password" id="password" name="password" required>
-
-        <br>
-        <input type="submit" value="Register">
-    </form>
-    <div class = "error">Error: {error}</div>
-    
-        
-    """
+    error = request.args.get('error')
+    body = render_template("login.html", error=error)
     con = get_db()
     cur = con.cursor()
     i = cur.execute("""

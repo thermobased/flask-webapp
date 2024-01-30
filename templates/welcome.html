@@ -23,6 +23,9 @@
             <input type="submit" value="Submit">
         </form>
     </div>
+    {% if error is not none %}
+    <div>{{error}}</div>
+    {% endif %}
 </div>
 
 
