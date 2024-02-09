@@ -1,3 +1,5 @@
+![example workflow](https://github.com/thermobased/flask-webapp/actions/workflows/python-package.yml/badge.svg)
+
 ## Dependencies
 
 We virtualenv to reproduce Python development environment, the list of
