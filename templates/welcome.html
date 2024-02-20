@@ -1,31 +1,48 @@
-<div class="habits">
+<div class=habits_container>
+    <div class="habits">
 
-    <div class="habits_list">
-        <h2>Your habits:</h2>
-        <ul>
-            {% for habit in habits %}
-            <li>
-                {{ habit }}
-                <form action="/delete_habit" method="post" class="inline_form" >
-                    <input type="hidden" name="habit_name" value="{{ habit }}">
+        <div class="habits_list">
+            <h2>Your habits:</h2>
+            <div>
+
+                <form action="delete_habit" method="post" class="inline_form">
+
+
+                    <script>
+                        const collection = {{collection|tojson}};
+                        console.log(collection);
+
+                    </script>
+
+
+                    {% for habit in habits %}
+
+                    <input type="submit" class="choose_habit" name="choice_habit" onclick=""
+                           value="{{ habit }}">
                     <input type="submit" value="Delete">
+                    <input type="hidden" name="habit_name" value="{{ habit }}">
+                    <br>
+
+                    {% endfor %}
                 </form>
-            </li>
-            {% endfor %}
-        </ul>
+            </div>
+        </div>
+
+        <div class="submit_new_habit">
+            <form action="/profile" method="post">
+                Create new habit:
+                <input type="text" id="new_habit" name="new_habit" required>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        {% if error is not none %}
+        <div>{{error}}</div>
+        {% endif %}
     </div>
 
-    <div class="submit_new_habit">
-        <form action="/profile" method="post">
-            Create new habit:
-            <input type="text" id="new_habit" name="new_habit" required>
-            <br>
-            <input type="submit" value="Submit">
-        </form>
+    <div>
+        {{ datapoints }}
     </div>
-    {% if error is not none %}
-    <div>{{error}}</div>
-    {% endif %}
 </div>
-
 

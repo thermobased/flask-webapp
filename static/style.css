@@ -57,3 +57,13 @@ form.habits {
 .inline_form{
     display:inline;
 }
+
+.choose_habit{
+    background-color: transparent;
+    border: none;
+    color: black;
+    cursor: pointer;
+}
+.habits_container{
+    display: inline-flex
+}

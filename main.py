@@ -79,24 +79,30 @@ def profile():
         user = welcome[0]
         i = cur.execute("""
                     SELECT habit FROM habits WHERE login = ?
-                    """, welcome)
+                    """, (user,))
         habits = i.fetchall()
+
+        j = cur.execute("SELECT habit, chislo, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+        collection = j.fetchall()
+
 
         #       reducing list of tuples to list of strings
         for q in range(0, len(habits)):
             habits[q] = habits[q][0]
 
         if welcome is not None:
-            body = render_template("welcome.html", habits=habits, error=error)
-
+            body = render_template("welcome.html", habits=habits, error=error, collection=collection)
             return render_template("main.html", title="Profile", body=body, name=welcome[0])
         else:
             return redirect(url_for('main'))
+
+
 
     if request.method == 'POST':
         con = get_db()
         cur = con.cursor()
         new_habit = request.form["new_habit"]
+
         try:
 
             cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
