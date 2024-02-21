@@ -8,27 +8,7 @@
                 <form action="delete_habit" method="post" class="inline_form">
 
 
-                    <script>
-                        const collection = {{collection|tojson}};
-                        function Choice_habit(habit) {
-                            let datapoints = [];
-                            const list = document.getElementById("list");
-                            while (document.getElementById("list").hasChildNodes()) {
-                                list.removeChild(list.firstChild);
-                            }
-                            for(let i = 0; i < collection.length; i++){
-                                if(collection[i][0] == habit){
-                                    for(let j = 0; j < collection[i].length; j++){
-                                        datapoints.push(collection[i][j]);
-                                    }
-                                    entr = document.createElement('li');
-                                    entr.innerHTML = datapoints;
-                                    list.appendChild(entr);
-                                    datapoints = [];
-                                }
-                            }
-                        }
-                    </script>
+
                     {% for habit in habits %}
                     <button type="button"
                             class="choose_habit"
