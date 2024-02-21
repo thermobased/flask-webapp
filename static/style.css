@@ -67,3 +67,9 @@ form.habits {
 .habits_container{
     display: inline-flex
 }
+#list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+}

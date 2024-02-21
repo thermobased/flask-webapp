@@ -10,7 +10,11 @@ UNIQUE(login, habit, chislo));
 
 
 --INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'eating chicken', date(), 228, 'niggers ate chicken!');
---INSERT INTO datapoints (login, habit, chislo, datapoint) VALUES ('vanja', 'b', date(), 'not ok');
+--INSERT INTO datapoints (login, habit, chislo, datapoint) VALUES ('vanja', 'b', time(), 'not ok');
+
+--INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'programming', date(), 1, 'niggers did programming!');
+--INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'programming', time(), 2, 'ok!');
+--INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'programming', time(), 1, 'kekw!');
 
 
 

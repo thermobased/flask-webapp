@@ -10,15 +10,33 @@
 
                     <script>
                         const collection = {{collection|tojson}};
-                        console.log(collection);
-
+                        function Choice_habit(habit) {
+                            let datapoints = [];
+                            const list = document.getElementById("list");
+                            while (document.getElementById("list").hasChildNodes()) {
+                                list.removeChild(list.firstChild);
+                            }
+                            for(let i = 0; i < collection.length; i++){
+                                if(collection[i][0] == habit){
+                                    for(let j = 0; j < collection[i].length; j++){
+                                        datapoints.push(collection[i][j]);
+                                    }
+                                    entr = document.createElement('li');
+                                    entr.innerHTML = datapoints;
+                                    list.appendChild(entr);
+                                    datapoints = [];
+                                }
+                            }
+                        }
                     </script>
-
-
                     {% for habit in habits %}
-
-                    <input type="submit" class="choose_habit" name="choice_habit" onclick=""
-                           value="{{ habit }}">
+                    <button type="button"
+                            class="choose_habit"
+                            name="choice_habit"
+                            value="{{ habit }}"
+                            onclick="Choice_habit(this.value)">
+                        {{ habit }}
+                    </button>
                     <input type="submit" value="Delete">
                     <input type="hidden" name="habit_name" value="{{ habit }}">
                     <br>
@@ -42,7 +60,9 @@
     </div>
 
     <div>
-        {{ datapoints }}
+        <ul id="list">
+
+        </ul>
     </div>
 </div>
 
