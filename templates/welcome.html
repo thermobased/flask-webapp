@@ -12,23 +12,32 @@
                         const collection = {{collection|tojson}};
                         function Choice_habit(habit) {
                             let datapoints = [];
-                            const list = document.getElementById("list");
-                            while (document.getElementById("list").hasChildNodes()) {
-                                list.removeChild(list.firstChild);
+                            const table = document.getElementById("table");
+                            while (document.getElementById("table").hasChildNodes()) {
+                                table.removeChild(table.firstChild);
                             }
                             for(let i = 0; i < collection.length; i++){
                                 if(collection[i][0] == habit){
-                                    for(let j = 0; j < collection[i].length; j++){
+                                    for(let j = 1; j < collection[i].length; j++){
                                         datapoints.push(collection[i][j]);
                                     }
-                                    entr = document.createElement('li');
-                                    entr.innerHTML = datapoints;
-                                    list.appendChild(entr);
+                                    new_row = document.createElement('tr');
+                                    new_table_data1 = document.createElement('td');
+                                    new_table_data2 = document.createElement('td');
+                                    new_table_data3 = document.createElement('td');
+                                    new_table_data1.innerHTML = datapoints[0];
+                                    new_table_data2.innerHTML = datapoints[1];
+                                    new_table_data3.innerHTML = datapoints[2];
+                                    new_row.appendChild(new_table_data1);
+                                    new_row.appendChild(new_table_data2);
+                                    new_row.appendChild(new_table_data3);
+                                    table.appendChild(new_row);
                                     datapoints = [];
                                 }
                             }
                         }
                     </script>
+
                     {% for habit in habits %}
                     <button type="button"
                             class="choose_habit"
@@ -60,9 +69,9 @@
     </div>
 
     <div>
-        <ul id="list">
+        <table id="table" class="habits_table">
 
-        </ul>
+        </table>
     </div>
 </div>
 

@@ -67,9 +67,15 @@ form.habits {
 .habits_container{
     display: inline-flex
 }
-#list{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
 
+.habits_table {
+
+    text-align: center;
+    width: 100%;
+}
+.habits_table tr:hover {
+    background-color: lightgray;
+}
+.habits_table th, td {
+  border-bottom: 1px solid #ddd;
 }
