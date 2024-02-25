@@ -7,10 +7,11 @@
 
                 <form action="delete_habit" method="post" class="inline_form">
 
-
-<script>
-                        const collection = {{collection|tojson}};
+                    <script>
+                        var habitname = "";
+                        var collection = {{collection|tojson}};
                         function Choice_habit(habit) {
+                            habitname = habit;
                             let datapoints = [];
                             const table = document.getElementById("table");
                             while (document.getElementById("table").hasChildNodes()) {
@@ -56,12 +57,33 @@
         </div>
 
         <div class="submit_new_habit">
-            <form action="/profile" method="post">
+            <form id="send_new_habit">
                 Create new habit:
                 <input type="text" id="new_habit" name="new_habit" required>
                 <br>
                 <input type="submit" value="Submit">
             </form>
+            <script>
+                const newHabit = document.querySelector("#send_new_habit");
+                        async function sendNewHabit() {
+                            const formData = new FormData(newHabit);
+                            formData.append("new_datapoint_name", habitname);
+                            console.log(formData);
+                            try {
+                                const response = await fetch("profile", {
+                                    method: "POST",
+                                    body: formData,
+                                });
+                                console.log(await response);
+                            } catch (e) {
+                                console.error(e);
+                            }
+                        }
+                        newHabit.addEventListener("submit", (event) => {
+                            event.preventDefault();
+                            sendNewHabit();
+                        });
+            </script>
         </div>
         {% if error is not none %}
         <div>{{error}}</div>
@@ -69,9 +91,42 @@
     </div>
 
     <div>
-        <table id="table" class="habits_table">
+        <div>
+            <table id="table" class="habits_table">
 
-        </table>
+            </table>
+        </div>
+        <div>
+            <form action="/profile" method="post" id="send_new_datapoint">
+                <input type="text" id="new_datapoint" name="new_datapoint" required>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+            <script>
+                        const sendDatapoint = document.querySelector("#send_new_datapoint");
+                        async function sendNewDatapoint() {
+                            const formData = new FormData(sendDatapoint);
+                            formData.append("new_datapoint_name", habitname);
+                            console.log(formData);
+                            try {
+                                const response = await fetch("profile", {
+                                    method: "POST",
+                                    body: formData,
+                                });
+                                console.log(await response);
+                            } catch (e) {
+                                console.error(e);
+                            }
+                        }
+                        sendDatapoint.addEventListener("submit", (event) => {
+                            event.preventDefault();
+                            sendNewDatapoint(habitname);
+                        });
+    </script>
+        </div>
     </div>
+
+
+
 </div>
 

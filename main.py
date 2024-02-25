@@ -82,9 +82,8 @@ def profile():
                     """, (user,))
         habits = i.fetchall()
 
-        j = cur.execute("SELECT habit, chislo, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+        j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
         collection = j.fetchall()
-
 
         #       reducing list of tuples to list of strings
         for q in range(0, len(habits)):
@@ -96,22 +95,41 @@ def profile():
         else:
             return redirect(url_for('main'))
 
-
-
     if request.method == 'POST':
         con = get_db()
         cur = con.cursor()
-        new_habit = request.form["new_habit"]
+        new_habit = request.form.get("new_habit")
+        new_datapoint = request.form.get("new_datapoint")
+        new_datapoint_name = request.form.get("new_datapoint_name")
+        print(new_habit)
+        print(new_datapoint_name)
+        print(new_datapoint)
 
-        try:
+        if new_habit:
+            try:
+                cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
+                con.commit()
+                return redirect(url_for('profile'))
+            except IntegrityError as e:
+                print("habit already exists!, ", e)
+                con.commit()
+                resp = make_response(redirect(url_for('profile', error=f"{e}")))
+                return resp
+        elif new_datapoint:
+            try:
+                print(new_datapoint_name, new_datapoint)
+                cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
+                            VALUES(?, ?, date(), ?, ?)""",
+                            (user, new_datapoint_name, 1, new_datapoint))
+                con.commit()
+                resp = make_response(redirect(url_for('profile')))
+                return resp
 
-            cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
-            con.commit()
-            return redirect(url_for('profile'))
-        except IntegrityError as e:
-            print("habit already exists!, ", e)
-            con.commit()
-            return redirect(url_for('profile', error=f"{e}"))
+            except IntegrityError as e:
+                print("integrity error, ", e)
+                con.commit()
+                resp = make_response(redirect(url_for('profile', error=f"{e}")))
+                return resp
 
 
 @app.route("/logout", methods=['POST'])
@@ -134,7 +152,7 @@ def delete_habit():
     habit_delete = request.form["habit_name"]
     con = get_db()
     cur = con.cursor()
-    i = cur.execute("SELECT habit FROM habits where (habit) =?", (habit_delete, ))
+    i = cur.execute("SELECT habit FROM habits where (habit) =?", (habit_delete,))
     if i.fetchone() is not None:
         cur.execute("DELETE FROM habits WHERE habit = ?", (habit_delete,))
     resp = make_response(redirect(url_for("profile")))
