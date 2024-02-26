@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, make_respo
 from jinja2 import Template
 import sqlite3, random, string, hashlib
 from sqlite3 import IntegrityError
+import time
 
 assert sqlite3.threadsafety == 3
 
@@ -106,6 +107,7 @@ def profile():
         print(new_datapoint)
 
         if new_habit:
+            time.sleep(2)
             try:
                 cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
                 con.commit()
@@ -116,6 +118,7 @@ def profile():
                 resp = make_response(redirect(url_for('profile', error=f"{e}")))
                 return resp
         elif new_datapoint:
+            time.sleep(2)
             try:
                 print(new_datapoint_name, new_datapoint)
                 cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)

@@ -79,3 +79,19 @@ form.habits {
 .habits_table th, td {
   border-bottom: 1px solid #ddd;
 }
+
+#loading_indicator {
+
+    margin: auto;
+    border: 10px solid grey;
+    border-radius: 50%;
+    border-top: 10px solid blue;
+    width: 10px;
+    height: 10px;
+    animation: spinIndicator 1s linear infinite;
+}
+@keyframes spinIndicator {
+    100% {
+        transform: rotate(360deg);
+    }
+}

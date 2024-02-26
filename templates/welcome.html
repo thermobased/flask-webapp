@@ -14,7 +14,7 @@
                             habitname = habit;
                             let datapoints = [];
                             const table = document.getElementById("table");
-                            while (document.getElementById("table").hasChildNodes()) {
+                            while (table.hasChildNodes()) {
                                 table.removeChild(table.firstChild);
                             }
                             for(let i = 0; i < collection.length; i++){
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="submit_new_habit">
+        <div class="submit_new_habit" id="submit_new_habit_container">
             <form id="send_new_habit">
                 Create new habit:
                 <input type="text" id="new_habit" name="new_habit" required>
@@ -70,11 +70,18 @@
                             formData.append("new_datapoint_name", habitname);
                             console.log(formData);
                             try {
+                                const container = document.getElementById("submit_new_habit_container");
+                                var loadingIndicator = document.createElement("div");
+                                loadingIndicator.id = "loading_indicator"
+                                container.appendChild(loadingIndicator);
                                 const response = await fetch("profile", {
                                     method: "POST",
                                     body: formData,
                                 });
                                 console.log(await response);
+                                if (response.ok) {
+                                    loadingIndicator.remove();
+                                }
                             } catch (e) {
                                 console.error(e);
                             }
@@ -82,6 +89,7 @@
                         newHabit.addEventListener("submit", (event) => {
                             event.preventDefault();
                             sendNewHabit();
+
                         });
             </script>
         </div>
@@ -97,7 +105,7 @@
             </table>
         </div>
         <div>
-            <form action="/profile" method="post" id="send_new_datapoint">
+            <form id="send_new_datapoint">
                 <input type="text" id="new_datapoint" name="new_datapoint" required>
                 <br>
                 <input type="submit" value="Submit">
@@ -109,11 +117,18 @@
                             formData.append("new_datapoint_name", habitname);
                             console.log(formData);
                             try {
+                                const container = document.getElementById("send_new_datapoint");
+                                var loadingIndicator = document.createElement("div");
+                                loadingIndicator.id = "loading_indicator"
+                                container.appendChild(loadingIndicator);
                                 const response = await fetch("profile", {
                                     method: "POST",
                                     body: formData,
                                 });
                                 console.log(await response);
+                                if (response.ok) {
+                                    loadingIndicator.remove();
+                                }
                             } catch (e) {
                                 console.error(e);
                             }
