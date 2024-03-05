@@ -1,58 +1,99 @@
 <div class=habits_container>
     <div class="habits">
 
-        <div class="habits_list">
+        <div id="habits_list">
             <h2>Your habits:</h2>
             <div>
 
-                <form action="delete_habit" method="post" class="inline_form">
-
-                    <script>
-                        var habitname = "";
-                        var collection = {{collection|tojson}};
-                        function Choice_habit(habit) {
-                            habitname = habit;
-                            let datapoints = [];
-                            const table = document.getElementById("table");
-                            while (table.hasChildNodes()) {
-                                table.removeChild(table.firstChild);
-                            }
-                            for(let i = 0; i < collection.length; i++){
-                                if(collection[i][0] == habit){
-                                    for(let j = 1; j < collection[i].length; j++){
-                                        datapoints.push(collection[i][j]);
-                                    }
-                                    new_row = document.createElement('tr');
-                                    new_table_data1 = document.createElement('td');
-                                    new_table_data2 = document.createElement('td');
-                                    new_table_data3 = document.createElement('td');
-                                    new_table_data1.innerHTML = datapoints[0];
-                                    new_table_data2.innerHTML = datapoints[1];
-                                    new_table_data3.innerHTML = datapoints[2];
-                                    new_row.appendChild(new_table_data1);
-                                    new_row.appendChild(new_table_data2);
-                                    new_row.appendChild(new_table_data3);
-                                    table.appendChild(new_row);
-                                    datapoints = [];
+                <script>
+                    var habitname = "";
+                    var collection = {{collection|tojson}};
+                    function Choice_habit(habit) {
+                        habitname = habit;
+                        let datapoints = [];
+                        const table = document.getElementById("table");
+                        while (table.hasChildNodes()) {
+                            table.removeChild(table.firstChild);
+                        }
+                        for(let i = 0; i < collection.length; i++){
+                            if(collection[i][0] == habit){
+                                for(let j = 1; j < collection[i].length; j++){
+                                    datapoints.push(collection[i][j]);
                                 }
+                                new_row = document.createElement('tr');
+                                new_table_data1 = document.createElement('td');
+                                new_table_data2 = document.createElement('td');
+                                new_table_data3 = document.createElement('td');
+                                new_table_data1.innerHTML = datapoints[0];
+                                new_table_data2.innerHTML = datapoints[1];
+                                new_table_data3.innerHTML = datapoints[2];
+                                new_row.appendChild(new_table_data1);
+                                new_row.appendChild(new_table_data2);
+                                new_row.appendChild(new_table_data3);
+                                table.appendChild(new_row);
+                                datapoints = [];
                             }
                         }
-                    </script>
 
+                    }
+                </script>
+
+                <form id="delete_habit">
                     {% for habit in habits %}
-                    <button type="button"
-                            class="choose_habit"
-                            name="choice_habit"
-                            value="{{ habit }}"
-                            onclick="Choice_habit(this.value)">
-                        {{ habit }}
-                    </button>
-                    <input type="submit" value="Delete">
-                    <input type="hidden" name="habit_name" value="{{ habit }}">
-                    <br>
-
+                    <div id="{{ habit }}">
+                        <button type="button"
+                                id="choose_habit"
+                                value="{{ habit }}"
+                                onclick="Choice_habit(this.value)">
+                            {{ habit }}
+                        </button>
+                        <input type="submit" value="Delete" name="{{ habit }}" onclick="setDeleteValue(this.name)">
+                        <input type="hidden" name="habit_delete" value="{{ habit }}">
+                        <br>
+                    </div>
                     {% endfor %}
                 </form>
+
+                <script>
+                    const delete_habit_form = document.querySelector("#delete_habit");
+                    let newValue = '';
+                    function setDeleteValue(value){
+                        newValue = value;
+                    }
+
+                    async function removeHabit() {
+                        const formData = new FormData();
+                        formData.append("habit_delete", newValue);
+                        console.log(formData);
+                        try {
+                            const container = document.querySelector("#habits_list div");
+                            var loadingIndicator = document.createElement("div");
+                            loadingIndicator.id = "loading_indicator"
+                            container.appendChild(loadingIndicator);
+                            const response = await fetch("/api/profile", {
+                                method: "POST",
+                                body: formData,
+                            });
+                            x = await response.json();
+                            console.log(x);
+                            if (x.status == 'ok') {
+                                loadingIndicator.remove();
+                                document.querySelector("#delete_habit #" + newValue).remove();
+                            }
+                            else{
+                                loadingIndicator.remove();
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                    delete_habit_form.addEventListener("submit", (event) => {
+                        event.preventDefault();
+                        removeHabit();
+
+                    });
+                </script>
+
             </div>
         </div>
 
@@ -63,35 +104,66 @@
                 <br>
                 <input type="submit" value="Submit">
             </form>
+
             <script>
                 const newHabit = document.querySelector("#send_new_habit");
-                        async function sendNewHabit() {
-                            const formData = new FormData(newHabit);
-                            formData.append("new_datapoint_name", habitname);
-                            console.log(formData);
-                            try {
-                                const container = document.getElementById("submit_new_habit_container");
-                                var loadingIndicator = document.createElement("div");
-                                loadingIndicator.id = "loading_indicator"
-                                container.appendChild(loadingIndicator);
-                                const response = await fetch("profile", {
-                                    method: "POST",
-                                    body: formData,
-                                });
-                                console.log(await response);
-                                if (response.ok) {
-                                    loadingIndicator.remove();
-                                }
-                            } catch (e) {
-                                console.error(e);
-                            }
-                        }
-                        newHabit.addEventListener("submit", (event) => {
-                            event.preventDefault();
-                            sendNewHabit();
-
+                function renderNewHabit(habitname){
+                    div = document.createElement("div");
+                    btn = document.createElement("button");
+                    input1 = document.createElement("input");
+                    input2 = document.createElement("input");
+                    input1.setAttribute('type', 'submit');
+                    input1.setAttribute('value', 'Delete');
+                    input1.setAttribute('name', habitname);
+                    input1.setAttribute('onClick', 'setDeleteValue(this.name)');
+                    input2.setAttribute('type', 'hidden');
+                    input2.setAttribute('name', 'habit_delete');
+                    input2.setAttribute('value', habitname);
+                    btn.setAttribute('type', 'button');
+                    btn.setAttribute('id', 'choose_habit');
+                    btn.setAttribute('value', habitname);
+                    btn.setAttribute('onClick', 'Choice_habit(this.value)');
+                    btn.innerHTML = habitname;
+                    div.setAttribute('id', habitname);
+                    div.appendChild(btn);
+                    div.appendChild(input1);
+                    div.appendChild(input2);
+                    div2 = document.querySelector("#delete_habit");
+                    div2.appendChild(div);
+                }
+                async function sendNewHabit() {
+                    const formData = new FormData(newHabit);
+                    const formhabit = formData.get("new_habit");
+                    try {
+                        const container = document.getElementById("submit_new_habit_container");
+                        var loadingIndicator = document.createElement("div");
+                        loadingIndicator.id = "loading_indicator";
+                        container.appendChild(loadingIndicator);
+                        const response = await fetch("/api/profile", {
+                            method: "POST",
+                            body: formData,
                         });
+                        x = await response.json();
+                        console.log(x);
+                        if (x.status == 'ok') {
+                            loadingIndicator.remove();
+                            renderNewHabit(formhabit);
+                            document.getElementById('new_habit').value = '';
+                        }
+                        else{
+                            loadingIndicator.remove();
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+                newHabit.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    sendNewHabit();
+
+                });
             </script>
+
         </div>
         {% if error is not none %}
         <div>{{error}}</div>
@@ -110,37 +182,65 @@
                 <br>
                 <input type="submit" value="Submit">
             </form>
+
             <script>
-                        const sendDatapoint = document.querySelector("#send_new_datapoint");
-                        async function sendNewDatapoint() {
-                            const formData = new FormData(sendDatapoint);
-                            formData.append("new_datapoint_name", habitname);
-                            console.log(formData);
-                            try {
-                                const container = document.getElementById("send_new_datapoint");
-                                var loadingIndicator = document.createElement("div");
-                                loadingIndicator.id = "loading_indicator"
-                                container.appendChild(loadingIndicator);
-                                const response = await fetch("profile", {
-                                    method: "POST",
-                                    body: formData,
-                                });
-                                console.log(await response);
-                                if (response.ok) {
-                                    loadingIndicator.remove();
-                                }
-                            } catch (e) {
-                                console.error(e);
-                            }
-                        }
-                        sendDatapoint.addEventListener("submit", (event) => {
-                            event.preventDefault();
-                            sendNewDatapoint(habitname);
+                const sendDatapoint = document.querySelector("#send_new_datapoint");
+                function renderNewDatapoint(datapoint) {
+                    //const date = new Date();
+                    //let today = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay();
+                    table = document.getElementById('table');
+                    new_row = document.createElement('tr');
+                    new_table_data1 = document.createElement('td');
+                    new_table_data2 = document.createElement('td');
+                    new_table_data3 = document.createElement('td');
+                    new_table_data1.innerHTML = 'today';
+                    new_table_data2.innerHTML = 1;
+                    new_table_data3.innerHTML = datapoint;
+                    new_row.appendChild(new_table_data1);
+                    new_row.appendChild(new_table_data2);
+                    new_row.appendChild(new_table_data3);
+                    table.appendChild(new_row);
+                }
+                var theDatapoint = '';
+                async function sendNewDatapoint() {
+                    const formData = new FormData(sendDatapoint);
+                    formData.append("new_datapoint_name", habitname);
+                    console.log(formData);
+                    theDatapoint = formData.get("new_datapoint");
+                    console.log('this is it', theDatapoint);
+                    try {
+                        const container = document.getElementById("send_new_datapoint");
+                        var loadingIndicator = document.createElement("div");
+                        loadingIndicator.id = "loading_indicator"
+                        container.appendChild(loadingIndicator);
+                        const response = await fetch("/api/profile", {
+                            method: "POST",
+                            body: formData,
                         });
-    </script>
+
+                        x = await response.json();
+                        console.log(x);
+                        if (x.status == 'ok') {
+                            loadingIndicator.remove();
+                            document.getElementById('new_datapoint').innerHTML = '';
+                        }
+                        else {
+                            loadingIndicator.remove();
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+
+                }
+                sendDatapoint.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    sendNewDatapoint(habitname);
+                    renderNewDatapoint(theDatapoint);
+                });
+            </script>
+
         </div>
     </div>
-
 
 
 </div>

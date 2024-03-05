@@ -31,12 +31,5 @@ CREATE TABLE datapoints (
 --CREATE TABLE days (habit INTEGER, den TEXT, FOREIGN KEY (habit) REFERENCES habits(id));
 
 
---INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'eating chicken', date(), 228, 'niggers ate chicken!');
---INSERT INTO datapoints (login, habit, chislo, datapoint) VALUES ('vanja', 'b', time(), 'not ok');
-
---INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'programming', date(), 1, 'niggers did programming!');
---INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'programming', time(), 2, 'ok!');
---INSERT INTO datapoints (login, habit, chislo, datapoint, comment) VALUES ('niggers', 'programming', time(), 1, 'kekw!');
-
 
 

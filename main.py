@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, make_response
+from flask import Flask, request, render_template, redirect, url_for, make_response, jsonify
 from jinja2 import Template
 import sqlite3, random, string, hashlib
 from sqlite3 import IntegrityError
@@ -65,7 +65,58 @@ def login():
     return resp
 
 
-@app.route("/profile", methods=['POST', 'GET'])
+@app.route("/api/profile", methods=['POST'])
+def handle_profile_post():
+    global user
+    authkey = request.cookies.get('authkey')
+    con = get_db()
+    cur = con.cursor()
+    i = cur.execute("""
+                        SELECT login FROM sessions WHERE cookie_key = ?
+                        """, (authkey,))
+    welcome = i.fetchone()
+    user = welcome[0]
+
+    new_habit = request.form.get("new_habit")
+    new_datapoint = request.form.get("new_datapoint")
+    new_datapoint_name = request.form.get("new_datapoint_name")
+    habit_delete = request.form.get("habit_delete")
+    if new_habit:
+        time.sleep(2)
+        try:
+            cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
+            con.commit()
+            return jsonify({'status': 'ok'})
+        except IntegrityError as e:
+            print("habit already exists!, ", e)
+            con.commit()
+            return jsonify({'status': 'error', 'error': str(e)})
+    if new_datapoint:
+        time.sleep(2)
+        try:
+            cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
+                            VALUES(?, ?, date(), ?, ?)""",
+                        (user, new_datapoint_name, 1, new_datapoint))
+            con.commit()
+            return jsonify({'status': 'ok'})
+        except IntegrityError as e:
+            print("datapoint already exists!, ", type(e))
+            con.commit()
+            return jsonify({'status': 'error', 'error': str(e)})
+    if habit_delete:
+        time.sleep(2)
+        try:
+            i = cur.execute("SELECT habit FROM habits where (habit) =?", (habit_delete,))
+            if i.fetchone() is not None:
+                cur.execute("DELETE FROM habits WHERE habit = ?", (habit_delete,))
+            return jsonify({'status': 'ok'})
+        except IntegrityError as e:
+            print("couldn't delete habit!, ", type(e))
+            con.commit()
+            return jsonify({'status': 'error', 'error': str(e)})
+
+
+@app.route("/profile", methods=['GET'])
 def profile():
     global user
     if request.method == 'GET':
@@ -96,44 +147,6 @@ def profile():
         else:
             return redirect(url_for('main'))
 
-    if request.method == 'POST':
-        con = get_db()
-        cur = con.cursor()
-        new_habit = request.form.get("new_habit")
-        new_datapoint = request.form.get("new_datapoint")
-        new_datapoint_name = request.form.get("new_datapoint_name")
-        print(new_habit)
-        print(new_datapoint_name)
-        print(new_datapoint)
-
-        if new_habit:
-            time.sleep(2)
-            try:
-                cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
-                con.commit()
-                return redirect(url_for('profile'))
-            except IntegrityError as e:
-                print("habit already exists!, ", e)
-                con.commit()
-                resp = make_response(redirect(url_for('profile', error=f"{e}")))
-                return resp
-        elif new_datapoint:
-            time.sleep(2)
-            try:
-                print(new_datapoint_name, new_datapoint)
-                cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
-                            VALUES(?, ?, date(), ?, ?)""",
-                            (user, new_datapoint_name, 1, new_datapoint))
-                con.commit()
-                resp = make_response(redirect(url_for('profile')))
-                return resp
-
-            except IntegrityError as e:
-                print("integrity error, ", e)
-                con.commit()
-                resp = make_response(redirect(url_for('profile', error=f"{e}")))
-                return resp
-
 
 @app.route("/logout", methods=['POST'])
 def logout():
@@ -147,18 +160,6 @@ def logout():
 
     resp = make_response(redirect(url_for("main")))
     resp.set_cookie('authkey', 'null')
-    return resp
-
-
-@app.route("/delete_habit", methods=['POST'])
-def delete_habit():
-    habit_delete = request.form["habit_name"]
-    con = get_db()
-    cur = con.cursor()
-    i = cur.execute("SELECT habit FROM habits where (habit) =?", (habit_delete,))
-    if i.fetchone() is not None:
-        cur.execute("DELETE FROM habits WHERE habit = ?", (habit_delete,))
-    resp = make_response(redirect(url_for("profile")))
     return resp
 
 

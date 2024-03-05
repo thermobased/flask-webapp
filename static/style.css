@@ -58,7 +58,7 @@ form.habits {
     display:inline;
 }
 
-.choose_habit{
+#choose_habit{
     background-color: transparent;
     border: none;
     color: black;
