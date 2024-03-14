@@ -82,7 +82,7 @@ def handle_profile_post():
     new_datapoint_name = request.form.get("new_datapoint_name")
     habit_delete = request.form.get("habit_delete")
     if new_habit:
-        time.sleep(2)
+        #time.sleep(2)
         try:
             cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
             con.commit()
@@ -92,7 +92,7 @@ def handle_profile_post():
             con.commit()
             return jsonify({'status': 'error', 'error': str(e)})
     if new_datapoint:
-        time.sleep(2)
+        #time.sleep(2)
         try:
             cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
                             VALUES(?, ?, date(), ?, ?)""",
@@ -104,12 +104,13 @@ def handle_profile_post():
             con.commit()
             return jsonify({'status': 'error', 'error': str(e)})
     if habit_delete:
-        time.sleep(2)
+        #time.sleep(2)
         try:
-            i = cur.execute("SELECT habit FROM habits where (habit) =?", (habit_delete,))
+            i = cur.execute("SELECT habit FROM habits where habit = ? and login = ?", (habit_delete, user))
             if i.fetchone() is not None:
-                cur.execute("DELETE FROM habits WHERE habit = ?", (habit_delete,))
-            return jsonify({'status': 'ok'})
+                cur.execute("DELETE FROM datapoints WHERE habit = ? and login = ?", (habit_delete, user))
+                cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
+                return jsonify({'status': 'ok'})
         except IntegrityError as e:
             print("couldn't delete habit!, ", type(e))
             con.commit()

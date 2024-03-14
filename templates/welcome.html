@@ -60,38 +60,46 @@
                     function setDeleteValue(value){
                         newValue = value;
                     }
-
-                    async function removeHabit() {
-                        const formData = new FormData();
-                        formData.append("habit_delete", newValue);
-                        console.log(formData);
-                        try {
-                            const container = document.querySelector("#habits_list div");
-                            var loadingIndicator = document.createElement("div");
-                            loadingIndicator.id = "loading_indicator"
-                            container.appendChild(loadingIndicator);
-                            const response = await fetch("/api/profile", {
-                                method: "POST",
-                                body: formData,
-                            });
-                            x = await response.json();
-                            console.log(x);
-                            if (x.status == 'ok') {
-                                loadingIndicator.remove();
-                                document.querySelector("#delete_habit #" + newValue).remove();
-                            }
-                            else{
-                                loadingIndicator.remove();
-                            }
-                        } catch (e) {
-                            console.error(e);
+                    function confirmDelete(){
+                        if (confirm("Delete this habit?")) {
+                            return 1;
                         }
                     }
-                    delete_habit_form.addEventListener("submit", (event) => {
-                        event.preventDefault();
-                        removeHabit();
+                    async function removeHabit() {
+                        if(confirmDelete()){
+                            const formData = new FormData();
+                            formData.append("habit_delete", newValue);
+                            console.log(formData);
+                            try {
+                                const container = document.querySelector("#habits_list div");
+                                var loadingIndicator = document.createElement("div");
+                                loadingIndicator.id = "loading_indicator"
+                                container.appendChild(loadingIndicator);
+                                const response = await fetch("/api/profile", {
+                                    method: "POST",
+                                    body: formData,
+                                });
+                                x = await response.json();
+                                console.log(x);
+                                if (x.status == 'ok') {
+                                    loadingIndicator.remove();
+                                    document.querySelector("#delete_habit #" + newValue).remove();
+                                }
+                                else{
+                                    loadingIndicator.remove();
+                                }
+                            } catch (e) {
+                                console.error(e);
+                            }
+                        }}
 
-                    });
+                        delete_habit_form.addEventListener("submit", (event) => {
+                            event.preventDefault();
+                            removeHabit();
+
+                        });
+
+
                 </script>
 
             </div>
@@ -169,14 +177,47 @@
         <div>{{error}}</div>
         {% endif %}
     </div>
+</div>
+    <div class="datapoints_container">
+        <div id="weeks_calendar_wrapper">
+            <div id="calendar">
+                <div class="day_names">
+                    <div class="weekdays">Mon</div>
+                    <div class="weekdays">Tue</div>
+                    <div class="weekdays">Wed</div>
+                    <div class="weekdays">Thu</div>
+                    <div class="weekdays">Fri</div>
+                    <div class="weekdays">Sat</div>
+                    <div class="weekdays">Sun</div>
+                </div>
+                <div class="first_week_row">
+                    <div class="dates">1</div>
+                    <div class="dates">2</div>
+                    <div class="dates">3</div>
+                    <div class="dates">4</div>
+                    <div class="dates">5</div>
+                    <div class="dates">6</div>
+                    <div class="dates">7</div>
+                </div>
+                <div class="second_week_row">
+                    <div class="dates">8</div>
+                    <div class="dates">9</div>
+                    <div class="dates">10</div>
+                    <div class="dates">11</div>
+                    <div class="dates">12</div>
+                    <div class="dates">13</div>
+                    <div class="dates">14</div>
+                </div>
+            </div>
+        </div>
 
-    <div>
         <div>
             <table id="table" class="habits_table">
 
             </table>
         </div>
         <div>
+
             <form id="send_new_datapoint">
                 <input type="text" id="new_datapoint" name="new_datapoint" required>
                 <br>
@@ -242,6 +283,10 @@
         </div>
     </div>
 
-
+<div class="next_container">
+    temp
 </div>
+
+
+
 

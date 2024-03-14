@@ -4,9 +4,22 @@
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
-
+    border-style: dashed;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: red;
+    padding: 1px;
 }
 
+.body_main{
+    display: flex;
+    flex-direction: row;
+    border-style: dashed;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: red;
+    padding: 1px;
+}
 .login_page{
     display: flex;
     flex-direction: row;
@@ -32,10 +45,19 @@
     height: 120px;
     border-width: 10px;
     border-radius: 45px;
+    border-style: dashed;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: red;
+    padding: 1px;
 }
 
-.logged_in .form {
-    color:red;
+.logged_in{
+    border-style: dashed;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: magenta;
+    padding: 1px;
 }
 
 .login_page {
@@ -50,9 +72,6 @@
     align-items: left;
 
 }
-form.habits {
-
-}
 
 .inline_form{
     display:inline;
@@ -65,9 +84,32 @@ form.habits {
     cursor: pointer;
 }
 .habits_container{
-    display: inline-flex
+    align-self: left;
+    display: inline-flex;
+    align-content: left;
+    width:25%;
+    border-style: dashed;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: blue;
+    padding: 1px;
 }
-
+.datapoints_container{
+    width:50%;
+    border-style: dashed;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: cyan;
+    padding: 1px;
+}
+.next_container{
+    width:25%;
+    border-style: dashed;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: darkgreen;
+    padding: 1px;
+}
 .habits_table {
 
     text-align: center;
@@ -94,4 +136,55 @@ form.habits {
     100% {
         transform: rotate(360deg);
     }
+}
+
+#calendar{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 100%;
+    border-style: dashed;
+    border-width: 1px;
+    border-radius: 2px;
+    border-color: black;
+    padding: 1px;
+    height: 200px;
+}
+
+.day_names{
+    justify-content: space-around;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+}
+.first_week_row{
+    justify-content: space-around;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.second_week_row{
+    justify-content: space-around;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.dates{
+    text-align:center;
+    border-style: dashed;
+    border-width: 1px;
+    border-radius: 2px;
+    border-color: black;
+    padding: 1px;
+}
+.weekdays{
+    text-align:center;
+    border-style: dashed;
+    border-width: 1px;
+    border-radius: 2px;
+    border-color: black;
+    padding: 1px;
+}
+.weeks_calendar_wrapper{
+
 }
