@@ -85,8 +85,16 @@ def handle_profile_post():
         #time.sleep(2)
         try:
             cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
+            j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+            collection = j.fetchall()
+            n = cur.execute("""
+                                                        SELECT habit FROM habits WHERE login = ?
+                                                        """, (user,))
+            habits = n.fetchall()
+            for q in range(0, len(habits)):
+                habits[q] = habits[q][0]
             con.commit()
-            return jsonify({'status': 'ok'})
+            return jsonify({'status': 'ok', "collection": collection, "habits": habits})
         except IntegrityError as e:
             print("habit already exists!, ", e)
             con.commit()
@@ -97,8 +105,10 @@ def handle_profile_post():
             cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
                             VALUES(?, ?, date(), ?, ?)""",
                         (user, new_datapoint_name, 1, new_datapoint))
+            j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+            collection = j.fetchall()
             con.commit()
-            return jsonify({'status': 'ok'})
+            return jsonify({'status': 'ok', "collection": collection})
         except IntegrityError as e:
             print("datapoint already exists!, ", type(e))
             con.commit()
@@ -110,7 +120,16 @@ def handle_profile_post():
             if i.fetchone() is not None:
                 cur.execute("DELETE FROM datapoints WHERE habit = ? and login = ?", (habit_delete, user))
                 cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
-                return jsonify({'status': 'ok'})
+                j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+                collection = j.fetchall()
+                n = cur.execute("""
+                                            SELECT habit FROM habits WHERE login = ?
+                                            """, (user,))
+                habits = n.fetchall()
+                for q in range(0, len(habits)):
+                    habits[q] = habits[q][0]
+                con.commit()
+                return jsonify({'status': 'ok', "collection": collection, "habits": habits})
         except IntegrityError as e:
             print("couldn't delete habit!, ", type(e))
             con.commit()
@@ -136,14 +155,18 @@ def profile():
         habits = i.fetchall()
 
         j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
-        collection = j.fetchall()
-
+        collection_init = j.fetchall()
+        collection = {
+            "habits": habits,
+            "collection": collection_init
+        }
         #       reducing list of tuples to list of strings
-        for q in range(0, len(habits)):
-            habits[q] = habits[q][0]
+        # for q in range(0, len(habits)):
+        #     habits[q] = habits[q][0]
+
 
         if welcome is not None:
-            body = render_template("welcome.html", habits=habits, error=error, collection=collection)
+            body = render_template("welcome.html", error=error, collection=collection)
             return render_template("main.html", title="Profile", body=body, name=welcome[0])
         else:
             return redirect(url_for('main'))
