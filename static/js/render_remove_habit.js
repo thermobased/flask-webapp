@@ -63,7 +63,7 @@ function removeHabit() {
                     collection = x.collection;
                     habits = x.habits;
                     document.getElementById("delete_habit").innerHTML = "";
-                    renderHabits(collection["habits"]);
+                    renderHabits(habits);
                     //document.querySelector("#delete_habit #" + newValue).remove();
                 }
                 else {
@@ -101,7 +101,7 @@ function sendNewHabit() {
                 collection = x.collection;
                 habits = x.habits;
                 document.getElementById("delete_habit").innerHTML = "";
-                renderHabits(collection["habits"]);
+                renderHabits(habits);
             }
             else {
                 loadingIndicator.remove();

@@ -59,7 +59,7 @@ async function removeHabit(): Promise <void> {
                 collection = x.collection;
                 habits = x.habits;
                 document.getElementById("delete_habit").innerHTML = "";
-                renderHabits(collection["habits"]);
+                renderHabits(habits);
 
                 //document.querySelector("#delete_habit #" + newValue).remove();
             }
@@ -96,7 +96,7 @@ delete_habit_form.addEventListener("submit", (event) => {
                             collection = x.collection;
                             habits = x.habits;
                             document.getElementById("delete_habit").innerHTML = "";
-                            renderHabits(collection["habits"]);
+                            renderHabits(habits);
                         }
                         else{
                             loadingIndicator.remove();
