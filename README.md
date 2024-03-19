@@ -25,7 +25,7 @@ To initialize the database, run the `./create-db.sh` script.
 From within python virtualenv:
 
 ```
-tsc
+npx tsc
 flask --app main run
 ```
 
