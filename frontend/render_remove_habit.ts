@@ -3,26 +3,26 @@ declare var habits: any;
 
 declare var newValue: any;
 
-function renderHabits(habits){
-    console.log(habits);
-    for(let i=0; i<habits.length; i++){
+function renderHabits(new_habits: any){
+    console.log(new_habits);
+    for(let i=0; i<new_habits.length; i++){
         var div = document.createElement("div");
         var btn = document.createElement("button");
         var input1 = document.createElement("input");
         var input2 = document.createElement("input");
         input1.setAttribute('type', 'submit');
         input1.setAttribute('value', 'Delete');
-        input1.setAttribute('name', habits[i]);
+        input1.setAttribute('name', new_habits[i]);
         input1.setAttribute('onClick', 'setDeleteValue(this.name)');
         input2.setAttribute('type', 'hidden');
         input2.setAttribute('name', 'habit_delete');
-        input2.setAttribute('value', habits[i]);
+        input2.setAttribute('value', new_habits[i]);
         btn.setAttribute('type', 'button');
         btn.setAttribute('id', 'choose_habit');
-        btn.setAttribute('value', habits[i]);
+        btn.setAttribute('value', new_habits[i]);
         btn.setAttribute('onClick', 'Choice_habit(this.value)');
-        btn.innerHTML = habits[i];
-        div.setAttribute('id', habits[i]);
+        btn.innerHTML = new_habits[i];
+        div.setAttribute('id', new_habits[i]);
         div.appendChild(btn);
         div.appendChild(input1);
         div.appendChild(input2);
