@@ -25,6 +25,10 @@ To initialize the database, run the `./create-db.sh` script.
 From within python virtualenv:
 
 ```
-tsc --target ES2015 static/js/*.ts
+tsc
 flask --app main run
 ```
+
+## Development
+
+You can add `strict: true` to tsconfig.json to make your compilation stricter.
