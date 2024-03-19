@@ -64,7 +64,6 @@
 
                 </form>
 
-                <script type="text/javascript" src="{{ url_for('static', filename='js/render_remove_habit.js') }}"></script>
 
             </div>
         </div>
@@ -77,65 +76,43 @@
                 <input type="submit" value="Submit">
             </form>
 
-            <script>
-                const newHabit = document.querySelector("#send_new_habit");
-                function renderNewHabit(habitname){
-                    div = document.createElement("div");
-                    btn = document.createElement("button");
-                    input1 = document.createElement("input");
-                    input2 = document.createElement("input");
-                    input1.setAttribute('type', 'submit');
-                    input1.setAttribute('value', 'Delete');
-                    input1.setAttribute('name', habitname);
-                    input1.setAttribute('onClick', 'setDeleteValue(this.name)');
-                    input2.setAttribute('type', 'hidden');
-                    input2.setAttribute('name', 'habit_delete');
-                    input2.setAttribute('value', habitname);
-                    btn.setAttribute('type', 'button');
-                    btn.setAttribute('id', 'choose_habit');
-                    btn.setAttribute('value', habitname);
-                    btn.setAttribute('onClick', 'Choice_habit(this.value)');
-                    btn.innerHTML = habitname;
-                    div.setAttribute('id', habitname);
-                    div.appendChild(btn);
-                    div.appendChild(input1);
-                    div.appendChild(input2);
-                    div2 = document.querySelector("#delete_habit");
-                    div2.appendChild(div);
-                }
-                async function sendNewHabit() {
-                    const formData = new FormData(newHabit);
-                    const formhabit = formData.get("new_habit");
-                    try {
-                        const container = document.getElementById("submit_new_habit_container");
-                        var loadingIndicator = document.createElement("div");
-                        loadingIndicator.id = "loading_indicator";
-                        container.appendChild(loadingIndicator);
-                        const response = await fetch("/api/profile", {
-                            method: "POST",
-                            body: formData,
-                        });
-                        x = await response.json();
-                        console.log(x);
-                        if (x.status == 'ok') {
-                            loadingIndicator.remove();
-                            renderNewHabit(formhabit);
-                            collection = x.collection;
-                            document.getElementById('new_habit').value = '';
-                        }
-                        else{
-                            loadingIndicator.remove();
-                        }
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
-                newHabit.addEventListener("submit", (event) => {
-                    event.preventDefault();
-                    sendNewHabit();
+<!--            <script>-->
+<!--//                const newHabit = document.querySelector("#send_new_habit");-->
+<!--//                async function sendNewHabit() {-->
+<!--//                    const formData = new FormData(newHabit);-->
+<!--//                    const formhabit = formData.get("new_habit");-->
+<!--//                    try {-->
+<!--//                        const container = document.getElementById("submit_new_habit_container");-->
+<!--//                        var loadingIndicator = document.createElement("div");-->
+<!--//                        loadingIndicator.id = "loading_indicator";-->
+<!--//                        container.appendChild(loadingIndicator);-->
+<!--//                        const response = await fetch("/api/profile", {-->
+<!--//                            method: "POST",-->
+<!--//                            body: formData,-->
+<!--//                        });-->
+<!--//                        x = await response.json();-->
+<!--//                        console.log(x);-->
+<!--//                        if (x.status == 'ok') {-->
+<!--//                            loadingIndicator.remove();-->
+<!--//                            renderNewHabit(formhabit);-->
+<!--//                            collection = x.collection;-->
+<!--//                            document.getElementById('new_habit').value = '';-->
+<!--//                        }-->
+<!--//                        else{-->
+<!--//                            loadingIndicator.remove();-->
+<!--//                        }-->
+<!--//                    } catch (e) {-->
+<!--//                        console.error(e);-->
+<!--//                    }-->
+<!--//                }-->
+<!--//                newHabit.addEventListener("submit", (event) => {-->
+<!--//                    event.preventDefault();-->
+<!--//                    sendNewHabit();-->
+<!--//-->
+<!--//                });-->
+<!--            </script>-->
 
-                });
-            </script>
+            <script type="text/javascript" src="{{ url_for('static', filename='js/render_remove_habit.js') }}"></script>
 
         </div>
         {% if error is not none %}
