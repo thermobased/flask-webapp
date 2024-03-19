@@ -25,6 +25,6 @@ To initialize the database, run the `./create-db.sh` script.
 From within python virtualenv:
 
 ```
-tsc --target ES2015 static/js/render_remove_habit.ts
+tsc --target ES2015 static/js/*.ts
 flask --app main run
 ```
