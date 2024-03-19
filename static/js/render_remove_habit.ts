@@ -1,5 +1,8 @@
 declare var collection: any;
+declare var habits: any;
+
 declare var newValue: any;
+
 function renderHabits(habits){
     console.log(habits);
     for(let i=0; i<habits.length; i++){
@@ -27,7 +30,7 @@ function renderHabits(habits){
         div2.appendChild(div);
     }
 }
-renderHabits(collection.habits);
+renderHabits(habits);
 
 const delete_habit_form = document.querySelector("#delete_habit");
 function confirmDelete(){
@@ -53,8 +56,8 @@ async function removeHabit(): Promise <void> {
             console.log(x);
             if (x.status == 'ok') {
                 loadingIndicator.remove();
-                collection.collection = x.collection;
-                collection.habits = x.habits;
+                collection = x.collection;
+                habits = x.habits;
                 document.getElementById("delete_habit").innerHTML = "";
                 renderHabits(collection["habits"]);
 
@@ -90,8 +93,8 @@ delete_habit_form.addEventListener("submit", (event) => {
                         console.log(x);
                         if (x.status == 'ok') {
                             loadingIndicator.remove();
-                            collection.collection = x.collection;
-                            collection.habits = x.habits;
+                            collection = x.collection;
+                            habits = x.habits;
                             document.getElementById("delete_habit").innerHTML = "";
                             renderHabits(collection["habits"]);
                         }

@@ -34,7 +34,7 @@ function renderHabits(habits) {
         div2.appendChild(div);
     }
 }
-renderHabits(collection.habits);
+renderHabits(habits);
 const delete_habit_form = document.querySelector("#delete_habit");
 function confirmDelete() {
     if (confirm("Delete this habit?")) {
@@ -60,8 +60,8 @@ function removeHabit() {
                 console.log(x);
                 if (x.status == 'ok') {
                     loadingIndicator.remove();
-                    collection.collection = x.collection;
-                    collection.habits = x.habits;
+                    collection = x.collection;
+                    habits = x.habits;
                     document.getElementById("delete_habit").innerHTML = "";
                     renderHabits(collection["habits"]);
                     //document.querySelector("#delete_habit #" + newValue).remove();
@@ -98,8 +98,8 @@ function sendNewHabit() {
             console.log(x);
             if (x.status == 'ok') {
                 loadingIndicator.remove();
-                collection.collection = x.collection;
-                collection.habits = x.habits;
+                collection = x.collection;
+                habits = x.habits;
                 document.getElementById("delete_habit").innerHTML = "";
                 renderHabits(collection["habits"]);
             }
