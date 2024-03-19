@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "date-time-js": "^1.0.6"
   }
 }
