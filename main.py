@@ -155,18 +155,14 @@ def profile():
         habits = i.fetchall()
 
         j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
-        collection_init = j.fetchall()
-        collection = {
-            "habits": habits,
-            "collection": collection_init
-        }
+        collection = j.fetchall()
         #       reducing list of tuples to list of strings
         # for q in range(0, len(habits)):
         #     habits[q] = habits[q][0]
 
 
         if welcome is not None:
-            body = render_template("welcome.html", error=error, collection=collection)
+            body = render_template("welcome.html", error=error, collection=collection, habits=habits)
             return render_template("main.html", title="Profile", body=body, name=welcome[0])
         else:
             return redirect(url_for('main'))
