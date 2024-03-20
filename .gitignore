@@ -1,7 +1,8 @@
 venv/
 .venv/
 node_modules/
-__pycache__/**
+.parcel-cache/
+__pycache__/
 collection.db
 collection.db-journal
 123.py
