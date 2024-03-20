@@ -16,21 +16,24 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Database
+## Building
 
-To initialize the database, run the `./create-db.sh` script.
+Build frontend typescript code and bundle it with dependencies to `static/js/`:
+
+```sh
+npm run make-static
+```
 
 ## Running
 
-From within python virtualenv:
+1. To initialize the database, run the `./create-db.sh` script.
 
-```sh
-# Build frontend typescript + dependencies
-npm run make-static
+2. Run flask all from within python virtualenv:
 
-# Run webserver
-flask --app main run
-```
+   ```sh
+   # Run webserver
+   flask --app main run
+   ```
 
 ## Development
 
