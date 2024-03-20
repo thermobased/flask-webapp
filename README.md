@@ -1,4 +1,5 @@
-[![example workflow](https://github.com/thermobased/flask-webapp/actions/workflows/python-package.yml/badge.svg)](https://github.com/thermobased/flask-webapp/actions)
+[![workflow](https://github.com/thermobased/flask-webapp/actions/workflows/python-package.yml/badge.svg)](https://github.com/thermobased/flask-webapp/actions)
+[![workflow](https://github.com/thermobased/flask-webapp/actions/workflows/node.js.yml/badge.svg)](https://github.com/thermobased/flask-webapp/actions)
 
 ## Dependencies
 
