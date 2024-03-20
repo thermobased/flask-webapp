@@ -24,8 +24,11 @@ To initialize the database, run the `./create-db.sh` script.
 
 From within python virtualenv:
 
-```
-npx tsc
+```sh
+# Build frontend typescript + dependencies
+npm run make-static
+
+# Run webserver
 flask --app main run
 ```
 
