@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./static/js",
+    "outDir": "tsc-output-do-not-use",
     "noImplicitAny": true,
     "module": "es6",
     "target": "es6",
