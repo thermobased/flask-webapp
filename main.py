@@ -81,6 +81,9 @@ def handle_profile_post():
     new_datapoint = request.form.get("new_datapoint")
     new_datapoint_name = request.form.get("new_datapoint_name")
     habit_delete = request.form.get("habit_delete")
+    new_datapoint_date = request.form.get("new_datapoint_date")
+    datapoint_delete = request.form.get("datapoint_delete")
+    datapoint_delete_name = request.form.get("datapoint_delete_name")
     if new_habit:
         #time.sleep(2)
         try:
@@ -103,8 +106,8 @@ def handle_profile_post():
         #time.sleep(2)
         try:
             cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
-                            VALUES(?, ?, date(), ?, ?)""",
-                        (user, new_datapoint_name, 1, new_datapoint))
+                            VALUES(?, ?, ?, ?, ?)""",
+                        (user, new_datapoint_name, new_datapoint_date, 1, new_datapoint))
             j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
             collection = j.fetchall()
             con.commit()
@@ -134,6 +137,27 @@ def handle_profile_post():
             print("couldn't delete habit!, ", type(e))
             con.commit()
             return jsonify({'status': 'error', 'error': str(e)})
+    if datapoint_delete:
+        # time.sleep(2)
+        try:
+            i = cur.execute("SELECT comment FROM datapoints where habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
+            if i.fetchone() is not None:
+                cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
+                j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+                collection = j.fetchall()
+                n = cur.execute("""
+                                                    SELECT habit FROM habits WHERE login = ?
+                                                    """, (user,))
+                habits = n.fetchall()
+                for q in range(0, len(habits)):
+                    habits[q] = habits[q][0]
+                con.commit()
+                return jsonify({'status': 'ok', "collection": collection, "habits": habits})
+        except IntegrityError as e:
+            print("couldn't delete habit!, ", type(e))
+            con.commit()
+            return jsonify({'status': 'error', 'error': str(e)})
+
 
 
 @app.route("/profile", methods=['GET'])
