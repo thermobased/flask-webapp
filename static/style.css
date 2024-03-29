@@ -1,4 +1,6 @@
-
+#todays{
+    background-color: red;
+}
 .header{
     display: flex;
     flex-direction: row;
@@ -170,6 +172,7 @@
     grid-template-columns: repeat(7, 1fr);
 }
 .dates{
+    font-size: 40px;
     text-align:center;
     border-style: dashed;
     border-width: 1px;
