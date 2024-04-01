@@ -84,6 +84,7 @@ def handle_profile_post():
     new_datapoint_date = request.form.get("new_datapoint_date")
     datapoint_delete = request.form.get("datapoint_delete")
     datapoint_delete_name = request.form.get("datapoint_delete_name")
+    datapoint_delete_date = request.form.get("datapoint_delete_date")
     if new_habit:
         #time.sleep(2)
         try:
@@ -142,7 +143,7 @@ def handle_profile_post():
         try:
             i = cur.execute("SELECT comment FROM datapoints where habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
             if i.fetchone() is not None:
-                cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
+                cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ? and occasion = ?", (datapoint_delete_name, datapoint_delete, datapoint_delete_date))
                 j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
                 collection = j.fetchall()
                 n = cur.execute("""

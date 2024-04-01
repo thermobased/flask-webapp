@@ -10,7 +10,7 @@ function Choice_habit(habit: string) {
     while (table.hasChildNodes()) {
         table.removeChild(table.firstChild);
     }
-    renderDatapoints(collection, habitname);
+    //renderDatapoints(collection, habitname);
 }
 
 function renderHabits(new_habits: any) {
