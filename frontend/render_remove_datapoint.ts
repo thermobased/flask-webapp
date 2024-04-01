@@ -1,13 +1,15 @@
 declare var collection: any;
 declare var habits: any;
-declare var habitname: string;
+declare var habitname: any;
+declare var chosenDate: any;
 import moment from 'moment';
 
-export function renderDatapoints(collection: any, habitname: any) {
+export function renderDatapoints(collection: any, habitname: any, date: any) {
     var table = document.getElementById('table');
     table.innerHTML = '';
 for(let i =0; i<collection.length; i++){
-    if(collection[i][0] == habitname){
+    console.log(date, 'renderdatapoints date');
+    if(collection[i][0] == habitname && collection[i][1] == date){
         let delete_button = document.createElement('input');
         let delete_hidden = document.createElement('input');
         delete_button.setAttribute('type', 'submit');
@@ -17,19 +19,19 @@ for(let i =0; i<collection.length; i++){
         delete_hidden.setAttribute('name', 'datapoint_delete');
         delete_hidden.setAttribute('value', collection[i][3]);
         let new_row = document.createElement('tr');
-        let new_table_data1 = document.createElement('td');
+        //let new_table_data1 = document.createElement('td');
         let new_table_data2 = document.createElement('td');
         let new_table_data3 = document.createElement('td');
         let new_div = document.createElement('div');
         new_div.appendChild(delete_button);
         new_div.appendChild(delete_hidden);
-        new_table_data1.innerHTML = collection[i][1];
+        //new_table_data1.innerHTML = collection[i][1];
         new_table_data2.innerHTML = '1';
         new_table_data3.innerHTML = collection[i][3];
         new_table_data3.appendChild(new_div);
-        new_row.appendChild(new_table_data1);
-        new_row.appendChild(new_table_data2);
+        //new_row.appendChild(new_table_data1);
         new_row.appendChild(new_table_data3);
+        new_row.appendChild(new_table_data2);
         table.appendChild(new_row);
 }
 }
@@ -37,11 +39,12 @@ for(let i =0; i<collection.length; i++){
 
 
 async function sendNewDatapoint(habitname: string): Promise <void>  {
+    console.log(chosenDate, 'chosendate');
     const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;
     const formData = new FormData(sendDatapoint);
     formData.append("new_datapoint_name", habitname);
-    let now = moment().format("YY, M, D");
-    formData.append("new_datapoint_date", now);
+    //let now = moment().format("YY, M, D");
+    formData.append("new_datapoint_date", chosenDate);
     console.log(formData);
     try {
         const container = document.getElementById("send_new_datapoint");
@@ -59,7 +62,7 @@ async function sendNewDatapoint(habitname: string): Promise <void>  {
             loadingIndicator.remove();
             collection = x.collection;
             habits = x.habits;
-            renderDatapoints(collection, habitname);
+            renderDatapoints(collection, habitname, chosenDate);
         }
         else {
             loadingIndicator.remove();
@@ -74,6 +77,7 @@ async function removeDatapoint(habitname: string): Promise <void>  {
     const removeDatapointForm = document.getElementById("remove_datapoint") as HTMLFormElement;
     const formData = new FormData(removeDatapointForm);
     formData.append("datapoint_delete_name", habitname);
+    formData.append("datapoint_delete_date", chosenDate);
     console.log(formData, "< --- removedatapoint formdata");
     try {
         const container = document.getElementById("remove_datapoint");
@@ -91,7 +95,7 @@ async function removeDatapoint(habitname: string): Promise <void>  {
             loadingIndicator.remove();
             collection = x.collection;
             habits = x.habits;
-            renderDatapoints(collection, habitname);
+            renderDatapoints(collection, habitname, chosenDate);
         }
         else {
             loadingIndicator.remove();
