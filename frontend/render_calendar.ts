@@ -20,7 +20,6 @@ function renderCalendar() {
         weekday.setAttribute('class', 'dates');
         weekday.setAttribute('value', moment(now).day(i).format("YY, M, D"));
         let kek = weekday.value;
-        console.log(kek);
         weekday.addEventListener('click', () => {
             setChosenDate(kek);
             renderDatapoints(collection, habitname, kek);
@@ -34,7 +33,6 @@ function renderCalendar() {
         weekday.setAttribute('class', 'dates');
         weekday.setAttribute('value', moment(now).day(i).format("YY, M, D"));
         let kek = weekday.value;
-        console.log(kek);
         weekday.addEventListener('click', () => {
             setChosenDate(kek);
             renderDatapoints(collection, habitname, kek);

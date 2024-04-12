@@ -12,6 +12,9 @@ function Choice_habit(habit: string) {
     }
     //renderDatapoints(collection, habitname);
 }
+function setDeleteValue(value: any){
+    newValue = value;
+}
 
 function renderHabits(new_habits: any) {
     console.log(new_habits);
@@ -31,6 +34,9 @@ function renderHabits(new_habits: any) {
         btn.setAttribute('value', new_habits[i]);
         btn.addEventListener('click', () => {
             Choice_habit(new_habits[i]);
+        });
+        input1.addEventListener('click', () => {
+           setDeleteValue(new_habits[i]);
         });
         btn.innerHTML = new_habits[i];
         div.setAttribute('id', new_habits[i]);

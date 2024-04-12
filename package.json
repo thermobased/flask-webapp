@@ -5,6 +5,7 @@
     "typescript": "^5.4.2"
   },
   "dependencies": {
+    "@unovis/ts": "^1.4.0",
     "date-time-js": "^1.0.6",
     "moment": "^2.30.1"
   },
