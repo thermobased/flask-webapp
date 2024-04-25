@@ -1,8 +1,5 @@
-declare var collection: any;
-declare var habits: any;
-declare var habitname: any;
-declare var chosenDate: any;
 import moment from 'moment';
+import { chosenDate, collection, habitname, habits, updateCollection, updateHabits } from './global_vars';
 
 export function renderDatapoints(collection: any, habitname: any, date: any) {
     var table = document.getElementById('table');
@@ -60,8 +57,8 @@ async function sendNewDatapoint(habitname: string): Promise <void>  {
         console.log(x);
         if (x.status == 'ok') {
             loadingIndicator.remove();
-            collection = x.collection;
-            habits = x.habits;
+            updateCollection(x.collection);
+            updateHabits(x.habits);
             renderDatapoints(collection, habitname, chosenDate);
         }
         else {
@@ -93,8 +90,8 @@ async function removeDatapoint(habitname: string): Promise <void>  {
         console.log(x);
         if (x.status == 'ok') {
             loadingIndicator.remove();
-            collection = x.collection;
-            habits = x.habits;
+            updateCollection(x.collection);
+            updateHabits(x.habits);
             renderDatapoints(collection, habitname, chosenDate);
         }
         else {

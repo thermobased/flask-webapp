@@ -1,11 +1,10 @@
-declare var collection: any;
-declare var habits: any;
+import { collection, habitname, habits, updateCollection, updateHabitname, updateHabits } from './global_vars';
+
 declare var newValue: any;
-declare var habitname: any;
 import {renderDatapoints} from "./render_remove_datapoint";
 
 function Choice_habit(habit: string) {
-    habitname = habit;
+    updateHabitname(habit);
     const table = document.getElementById("table");
     while (table.hasChildNodes()) {
         table.removeChild(table.firstChild);
@@ -77,8 +76,8 @@ async function removeHabit(): Promise<void> {
             console.log(x);
             if (x.status == 'ok') {
                 loadingIndicator.remove();
-                collection = x.collection;
-                habits = x.habits;
+                updateCollection(x.collection);
+                updateHabits(x.habits);
                 document.getElementById("delete_habit").innerHTML = "";
                 renderHabits(habits);
                 eraseDatapoints();
@@ -110,8 +109,8 @@ async function sendNewHabit() {
         console.log(x);
         if (x.status == 'ok') {
             loadingIndicator.remove();
-            collection = x.collection;
-            habits = x.habits;
+            updateCollection(x.collection);
+            updateHabitname(x.habits);
             document.getElementById("delete_habit").innerHTML = "";
             renderHabits(habits);
         } else {

@@ -1,6 +1,6 @@
 import { XYContainer, Timeline } from '@unovis/ts'
 import moment from "moment"
-declare var collection: any;
+import { collection } from './global_vars';
 
 type TimeDataRecord = {
     timestamp: number; // Position on the X axis. Can be `number` or `Date`

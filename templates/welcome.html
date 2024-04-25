@@ -1,20 +1,20 @@
+<script id="collection-script" type="application/json">
+  {{collection|tojson}}
+</script>
+<script id="habits-script" type="application/json">
+  {{habits|tojson}}
+</script>
+
 <div class=habits_container>
     <div class="habits">
 
         <div id="habits_list">
             <h2>Your habits:</h2>
             <div>
-                <script>
-                    var chosenDate = "";
-                    var habitname = "";
-                    var collection = {{collection|tojson}};
-                    var habits = {{habits|tojson}};
-                    console.log(collection);
-                    let newValue = '';
-                </script>
                 <script type="text/javascript" src="{{ url_for('static', filename='js/render_remove_habit.js') }}"></script>
                 <script type="text/javascript" src="{{ url_for('static', filename='js/render_calendar.js') }}"></script>
                 <script type="text/javascript" src="{{ url_for('static', filename='js/render_remove_datapoint.js') }}"></script>
+                <script type="text/javascript" src="{{ url_for('static', filename='js/global_vars.js') }}"></script>
                 <form id="delete_habit">
 
                 </form>
