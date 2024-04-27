@@ -10,6 +10,6 @@
     "moment": "^2.30.1"
   },
   "scripts": {
-    "make-static": "npx parcel build --no-optimize --dist-dir static/js/ frontend/**/*.ts"
+    "make-static": "tsc && npx parcel build --no-optimize --dist-dir static/js/ frontend/**/*.ts"
   }
 }
