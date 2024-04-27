@@ -1,13 +1,11 @@
 import {renderDatapoints} from "./render_remove_datapoint";
-declare var habitname: any;
-declare var collection: any;
-declare var chosenDate: any;
+import { collection, habitname, chosenDate, updateChosenDate, updateCollection, updateHabits } from './global_vars';
 import moment, {MomentFormatSpecification} from "moment";
 
 
 function renderCalendar() {
     function setChosenDate(kek: any){
-        chosenDate = kek;
+        updateChosenDate(kek);
         console.log("chosenDate set");
     }
     const firstWeek = document.querySelector(".first_week_row");
@@ -46,5 +44,11 @@ function renderCalendar() {
     }
 }
 window.addEventListener("load", (event) => {
+    const ssrCollection = document.getElementById('collection-script');
+    const ssrHabits = document.getElementById('habits-script');
+
+    updateCollection(JSON.parse(ssrCollection.textContent));
+    updateHabits(JSON.parse(ssrHabits.textContent));
+
     renderCalendar();
 });
