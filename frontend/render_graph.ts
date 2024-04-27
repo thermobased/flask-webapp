@@ -1,4 +1,4 @@
-import { XYContainer, Timeline } from '@unovis/ts'
+import {XYContainer, Timeline, StackedBar, Axis} from '@unovis/ts'
 import moment from "moment"
 import { collection } from './global_vars';
 
