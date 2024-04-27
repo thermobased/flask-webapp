@@ -159,12 +159,13 @@ async function removeHabit(): Promise<void> {
 async function sendNewHabit() {
     var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
     const formData = new FormData(newHabit);
-    const formHabit = formData.get("new_habit");
+    const container = document.getElementById("submit_new_habit_container")!;
+
+    var loadingIndicator = document.createElement("div");
+    loadingIndicator.id = "loading_indicator";
+    container.appendChild(loadingIndicator);
+
     try {
-        const container = document.getElementById("submit_new_habit_container")!;
-        var loadingIndicator = document.createElement("div");
-        loadingIndicator.id = "loading_indicator";
-        container.appendChild(loadingIndicator);
         const response = await fetch("/api/profile", {
             method: "POST",
             body: formData,
@@ -172,18 +173,19 @@ async function sendNewHabit() {
         var x = await response.json();
         console.log(x);
         if (x.status == 'ok') {
-            loadingIndicator.remove();
-
             updateCollection(x.collection);
-            updateHabitname(x.habits);
+            updateHabits(x.habits);
             document.getElementById("delete_habit")!.innerHTML = "";
 
             renderHabits(habits);
         } else {
-            loadingIndicator.remove();
+            console.log(`sendNewHabit: server responded with ${JSON.stringify(x)}`);
         }
     } catch (e) {
-        console.error(e);
+        console.error(`sendNewHabit: got exception ${e}`);
+    } finally {
+        // Make sure loading indicator is removed no matter what
+        loadingIndicator.remove();
     }
 }
 
