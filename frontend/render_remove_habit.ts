@@ -57,7 +57,7 @@ function renderHabits(new_habits: any) {
         );
         delete_button.innerHTML = "Delete";
         delete_button.addEventListener('click', () => {
-            setDeleteValue(new_habits[i]);
+            updateDeleteValue(new_habits[i]);
             removeHabit();
         });
 
