@@ -1,6 +1,12 @@
-import { collection, habitname, habits, updateCollection, updateHabitname, updateHabits } from './global_vars';
-
-declare var newValue: any;
+import {
+    collection, deleteValue,
+    habitname,
+    habits,
+    updateCollection,
+    updateDeleteValue,
+    updateHabitname,
+    updateHabits
+} from './global_vars';
 import {renderDatapoints} from "./render_remove_datapoint";
 
 function Choice_habit(habit: string) {
@@ -10,9 +16,6 @@ function Choice_habit(habit: string) {
         table.removeChild(table.firstChild);
     }
     //renderDatapoints(collection, habitname);
-}
-function setDeleteValue(value: any){
-    newValue = value;
 }
 
 function renderHabits(new_habits: any) {
@@ -35,7 +38,7 @@ function renderHabits(new_habits: any) {
             Choice_habit(new_habits[i]);
         });
         input1.addEventListener('click', () => {
-           setDeleteValue(new_habits[i]);
+           updateDeleteValue(new_habits[i]);
         });
         btn.innerHTML = new_habits[i];
         div.setAttribute('id', new_habits[i]);
@@ -61,7 +64,7 @@ function confirmDelete() {
 async function removeHabit(): Promise<void> {
     if (confirmDelete()) {
         const formData = new FormData();
-        formData.append("habit_delete", newValue);
+        formData.append("habit_delete", deleteValue);
         console.log(formData);
         try {
             const container = document.querySelector("#habits_list div");
