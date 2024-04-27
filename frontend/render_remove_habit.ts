@@ -43,9 +43,9 @@ function renderHabits(new_habits: any) {
             Choice_habit(new_habits[i]);
         });
 
-        input1.addEventListener('click', () => {
-           updateDeleteValue(new_habits[i]);
-        });
+        // input1.addEventListener('click', () => {
+        //    updateDeleteValue(new_habits[i]);
+        // });
 
         btn.innerHTML = new_habits[i];
 
