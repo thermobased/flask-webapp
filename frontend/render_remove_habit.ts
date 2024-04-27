@@ -18,7 +18,7 @@ function Choice_habit(habit: string) {
     //renderDatapoints(collection, habitname);
 }
 
-function renderHabits(new_habits: any) {
+export function renderHabits(new_habits: any) {
     function createElementWithAttributes<K extends keyof HTMLElementTagNameMap>
     (tagName: K, attrs: { [key: string]: string }): HTMLElementTagNameMap[K] {
         var el = document.createElement(tagName);
@@ -190,6 +190,9 @@ async function sendNewHabit() {
 }
 
 window.addEventListener("load", (event) => {
+    const ssrHabits = document.getElementById('habits-script')!;
+    updateHabits(JSON.parse(ssrHabits.textContent!));
+
     renderHabits(habits);
     var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
     newHabit.addEventListener("submit", (event) => {
