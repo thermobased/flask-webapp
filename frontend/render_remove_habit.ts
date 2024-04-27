@@ -188,20 +188,13 @@ async function sendNewHabit() {
 }
 
 window.addEventListener("load", (event) => {
-    event.preventDefault();
-    renderHabits(habits)
+    renderHabits(habits);
+    var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
+    newHabit.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendNewHabit();
+    });
 });
 /*    const delete_habit_form = document.querySelector("#delete_habit");
     delete_habit_form.addEventListener("submit", (event) => {
         removeHabit();*/
-
-
-var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
-newHabit.addEventListener("submit", (event) => {
-    event.preventDefault();
-    sendNewHabit();
-});
-
-
-
-
