@@ -1,4 +1,4 @@
-import { XYContainer, Timeline } from '@unovis/ts'
+import {XYContainer, Timeline, StackedBar, Axis} from '@unovis/ts'
 import moment from "moment"
 declare var collection: any;
 

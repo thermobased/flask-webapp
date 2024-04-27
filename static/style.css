@@ -191,3 +191,12 @@
 .weeks_calendar_wrapper{
 
 }
+
+#graph {
+    max-height: 200px;
+    max-width: 200px;
+}
+#graph2 {
+    max-height: 200px;
+    max-width: 200px;
+}

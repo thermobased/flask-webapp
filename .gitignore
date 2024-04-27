@@ -6,3 +6,5 @@ __pycache__/
 collection.db
 collection.db-journal
 123.py
+/static/js/
+/tsc-output-do-not-use/
