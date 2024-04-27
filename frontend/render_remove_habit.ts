@@ -1,25 +1,21 @@
-declare var collection: any;
-declare var habits: any;
-declare var deleteValue: any;
-declare var habitname: any;
-declare var expandValue: any;
+import {
+    collection, deleteValue,
+    habitname,
+    habits,
+    updateCollection,
+    updateDeleteValue,
+    updateHabitname,
+    updateHabits
+} from './global_vars';
 import {renderDatapoints} from "./render_remove_datapoint";
 
 function Choice_habit(habit: string) {
-    habitname = habit;
+    updateHabitname(habit);
     const table = document.getElementById("table");
     while (table.hasChildNodes()) {
         table.removeChild(table.firstChild);
     }
     //renderDatapoints(collection, habitname);
-}
-
-function setDeleteValue(value: string) {
-    deleteValue = value;
-}
-
-function setExpandValue(value: string) {
-    expandValue = value;
 }
 
 function renderHabits(new_habits: any) {
@@ -46,6 +42,11 @@ function renderHabits(new_habits: any) {
         btn.addEventListener('click', () => {
             Choice_habit(new_habits[i]);
         });
+
+        input1.addEventListener('click', () => {
+           updateDeleteValue(new_habits[i]);
+        });
+
         btn.innerHTML = new_habits[i];
 
         let delete_button = createElementWithAttributes("button",
@@ -122,8 +123,8 @@ async function removeHabit(): Promise<void> {
             console.log(x);
             if (x.status == 'ok') {
                 loadingIndicator.remove();
-                collection = x.collection;
-                habits = x.habits;
+                updateCollection(x.collection);
+                updateHabits(x.habits);
                 document.getElementById("delete_habit").innerHTML = "";
                 renderHabits(habits);
                 eraseDatapoints();
@@ -172,8 +173,11 @@ async function sendNewHabit() {
         console.log(x);
         if (x.status == 'ok') {
             loadingIndicator.remove();
-            collection = x.collection;
-            habits = x.habits;
+
+            updateCollection(x.collection);
+            updateHabitname(x.habits);
+            document.getElementById("delete_habit").innerHTML = "";
+
             renderHabits(habits);
         } else {
             loadingIndicator.remove();
