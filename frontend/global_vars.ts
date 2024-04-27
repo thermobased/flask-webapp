@@ -27,6 +27,10 @@ export var chosenDate: any;
 export function updateChosenDate(x: any) {
   chosenDate = x;
 }
+export var deleteValue: any;
+export function updateDeleteValue(x: any) {
+  deleteValue = x;
+}
 
 window.addEventListener("load", (event) => {
   console.log(collection);
