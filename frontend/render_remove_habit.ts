@@ -11,9 +11,9 @@ import {renderDatapoints} from "./render_remove_datapoint";
 
 function Choice_habit(habit: string) {
     updateHabitname(habit);
-    const table = document.getElementById("table");
+    const table = document.getElementById("table")!;
     while (table.hasChildNodes()) {
-        table.removeChild(table.firstChild);
+        table.removeChild(table.firstChild!);
     }
     //renderDatapoints(collection, habitname);
 }
@@ -76,7 +76,7 @@ function renderHabits(new_habits: any) {
                 'action' : '/habit_expand',
                 'method' : 'get',
             });
-        var div2 = document.querySelector("#habit_selector");
+        var div2 = document.querySelector("#habit_selector")!;
         expand_form.appendChild(expand);
         div2.appendChild(btn);
         div2.appendChild(delete_button);
@@ -95,7 +95,7 @@ function renderHabits(new_habits: any) {
 
 
 function eraseDatapoints() {
-    var table = document.getElementById('table');
+    var table = document.getElementById('table')!;
     table.innerHTML = '';
 }
 
@@ -111,7 +111,7 @@ async function removeHabit(): Promise<void> {
         formData.append("habit_delete", deleteValue);
         console.log(formData);
         try {
-            const container = document.querySelector("#habits_list div");
+            const container = document.querySelector("#habits_list div")!;
             var loadingIndicator = document.createElement("div");
             loadingIndicator.id = "loading_indicator"
             container.appendChild(loadingIndicator);
@@ -125,7 +125,7 @@ async function removeHabit(): Promise<void> {
                 loadingIndicator.remove();
                 updateCollection(x.collection);
                 updateHabits(x.habits);
-                document.getElementById("delete_habit").innerHTML = "";
+                document.getElementById("delete_habit")!.innerHTML = "";
                 renderHabits(habits);
                 eraseDatapoints();
             } else {
@@ -161,7 +161,7 @@ async function sendNewHabit() {
     const formData = new FormData(newHabit);
     const formHabit = formData.get("new_habit");
     try {
-        const container = document.getElementById("submit_new_habit_container");
+        const container = document.getElementById("submit_new_habit_container")!;
         var loadingIndicator = document.createElement("div");
         loadingIndicator.id = "loading_indicator";
         container.appendChild(loadingIndicator);
@@ -176,7 +176,7 @@ async function sendNewHabit() {
 
             updateCollection(x.collection);
             updateHabitname(x.habits);
-            document.getElementById("delete_habit").innerHTML = "";
+            document.getElementById("delete_habit")!.innerHTML = "";
 
             renderHabits(habits);
         } else {

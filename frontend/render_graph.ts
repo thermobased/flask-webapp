@@ -15,7 +15,7 @@ for(let i = 0; i<collection.length; i++){
              )
 }
 console.log(data);
-const node = document.getElementById('graph');
+const node = document.getElementById('graph')!;
 const container = new XYContainer<TimeDataRecord>(node, {
     components: [
         new Timeline<TimeDataRecord>({
