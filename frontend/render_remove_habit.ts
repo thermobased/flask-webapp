@@ -110,11 +110,13 @@ async function removeHabit(): Promise<void> {
         const formData = new FormData();
         formData.append("habit_delete", deleteValue);
         console.log(formData);
+        const container = document.querySelector("#habits_list div")!;
+
+        var loadingIndicator = document.createElement("div");
+        loadingIndicator.id = "loading_indicator"
+        container.appendChild(loadingIndicator);
+
         try {
-            const container = document.querySelector("#habits_list div")!;
-            var loadingIndicator = document.createElement("div");
-            loadingIndicator.id = "loading_indicator"
-            container.appendChild(loadingIndicator);
             const response = await fetch("/api/profile", {
                 method: "POST",
                 body: formData,
@@ -122,17 +124,18 @@ async function removeHabit(): Promise<void> {
             var x = await response.json();
             console.log(x);
             if (x.status == 'ok') {
-                loadingIndicator.remove();
                 updateCollection(x.collection);
                 updateHabits(x.habits);
                 document.getElementById("delete_habit")!.innerHTML = "";
                 renderHabits(habits);
                 eraseDatapoints();
             } else {
-                loadingIndicator.remove();
+                console.log(`sendNewHabit: server responded with ${JSON.stringify(x)}`);
             }
         } catch (e) {
-            console.error(e);
+            console.error(`sendNewHabit: got exception ${e}`);
+        } finally {
+            loadingIndicator.remove();
         }
     }
 }
