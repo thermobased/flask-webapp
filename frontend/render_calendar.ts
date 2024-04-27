@@ -1,9 +1,8 @@
 import {renderDatapoints} from "./render_remove_datapoint";
-import { collection, habitname, chosenDate, updateChosenDate, updateCollection, updateHabits } from './global_vars';
+import { collection, habits, habitname, chosenDate, updateChosenDate, updateCollection, updateHabits } from './global_vars';
 import moment, {MomentFormatSpecification} from "moment";
 
-
-function renderCalendar() {
+export function renderCalendar() {
     function setChosenDate(kek: any){
         updateChosenDate(kek);
         console.log("chosenDate set");
@@ -43,12 +42,3 @@ function renderCalendar() {
         secondWeek.appendChild(weekday);
     }
 }
-window.addEventListener("load", (event) => {
-    const ssrCollection = document.getElementById('collection-script')!;
-    const ssrHabits = document.getElementById('habits-script')!;
-
-    updateCollection(JSON.parse(ssrCollection.textContent!));
-    updateHabits(JSON.parse(ssrHabits.textContent!));
-
-    renderCalendar();
-});
