@@ -2,7 +2,7 @@ import moment from 'moment';
 import { chosenDate, collection, habitname, habits, updateCollection, updateHabits } from './global_vars';
 
 export function renderDatapoints(collection: any, habitname: any, date: any) {
-    var table = document.getElementById('table');
+    var table = document.getElementById('table')!;
     table.innerHTML = '';
 for(let i =0; i<collection.length; i++){
     console.log(date, 'renderdatapoints date');
@@ -44,7 +44,7 @@ async function sendNewDatapoint(habitname: string): Promise <void>  {
     formData.append("new_datapoint_date", chosenDate);
     console.log(formData);
     try {
-        const container = document.getElementById("send_new_datapoint");
+        const container = document.getElementById("send_new_datapoint")!;
         var loadingIndicator = document.createElement("div");
         loadingIndicator.id = "loading_indicator"
         container.appendChild(loadingIndicator);
@@ -77,7 +77,7 @@ async function removeDatapoint(habitname: string): Promise <void>  {
     formData.append("datapoint_delete_date", chosenDate);
     console.log(formData, "< --- removedatapoint formdata");
     try {
-        const container = document.getElementById("remove_datapoint");
+        const container = document.getElementById("remove_datapoint")!;
         var loadingIndicator = document.createElement("div");
         loadingIndicator.id = "loading_indicator"
         container.appendChild(loadingIndicator);

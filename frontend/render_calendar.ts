@@ -8,8 +8,8 @@ function renderCalendar() {
         updateChosenDate(kek);
         console.log("chosenDate set");
     }
-    const firstWeek = document.querySelector(".first_week_row");
-    const secondWeek = document.querySelector(".second_week_row");
+    const firstWeek = document.querySelector(".first_week_row")!;
+    const secondWeek = document.querySelector(".second_week_row")!;
     let now = moment().day(0);
         firstWeek.innerHTML = '';
         secondWeek.innerHTML = '';
@@ -44,11 +44,11 @@ function renderCalendar() {
     }
 }
 window.addEventListener("load", (event) => {
-    const ssrCollection = document.getElementById('collection-script');
-    const ssrHabits = document.getElementById('habits-script');
+    const ssrCollection = document.getElementById('collection-script')!;
+    const ssrHabits = document.getElementById('habits-script')!;
 
-    updateCollection(JSON.parse(ssrCollection.textContent));
-    updateHabits(JSON.parse(ssrHabits.textContent));
+    updateCollection(JSON.parse(ssrCollection.textContent!));
+    updateHabits(JSON.parse(ssrHabits.textContent!));
 
     renderCalendar();
 });
