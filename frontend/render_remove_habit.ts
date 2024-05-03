@@ -30,7 +30,6 @@ export function renderHabits(new_habits: any) {
         return el;
     }
 
-    console.log(new_habits);
     for (let i = 0; i < new_habits.length; i++) {
         let btn = createElementWithAttributes("button",
             {
@@ -191,10 +190,21 @@ async function sendNewHabit() {
         loadingIndicator.remove();
     }
 }
+function datapointRangeSlider () {
+    var datapoint_range = document.querySelector('#datapoint_range') as HTMLInputElement;
+    var datapoint_range_value = document.querySelector('#datapoint_range_value') as HTMLOutputElement;
+    datapoint_range_value.textContent = datapoint_range.value;
+    datapoint_range.addEventListener("input", (event) => {
+        datapoint_range_value.textContent = datapoint_range.value;
+    });
+}
+
+
 
 window.addEventListener("load", (event) => {
     const ssrHabits = document.getElementById('habits-script')!;
     updateHabits(JSON.parse(ssrHabits.textContent!));
+    datapointRangeSlider();
 
     renderHabits(habits);
     var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;

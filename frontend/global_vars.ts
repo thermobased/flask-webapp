@@ -31,8 +31,3 @@ export var deleteValue: any;
 export function updateDeleteValue(x: any) {
   deleteValue = x;
 }
-
-window.addEventListener("load", (event) => {
-  console.log(collection);
-  console.log(habits);
-});

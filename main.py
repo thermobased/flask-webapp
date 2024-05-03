@@ -85,6 +85,7 @@ def handle_profile_post():
     datapoint_delete = request.form.get("datapoint_delete")
     datapoint_delete_name = request.form.get("datapoint_delete_name")
     datapoint_delete_date = request.form.get("datapoint_delete_date")
+    new_datapoint_time = request.form.get("new_datapoint_time")
     if new_habit:
         #time.sleep(2)
         try:
@@ -108,7 +109,7 @@ def handle_profile_post():
         try:
             cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
                             VALUES(?, ?, ?, ?, ?)""",
-                        (user, new_datapoint_name, new_datapoint_date, 1, new_datapoint))
+                        (user, new_datapoint_name, new_datapoint_date, new_datapoint_time, new_datapoint))
             j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
             collection = j.fetchall()
             con.commit()

@@ -14,7 +14,7 @@ for(let i = 0; i<collection.length; i++){
         {timestamp: moment(collection[i][1], "YY, M, D").unix()/24/60/60, length: collection[i][2], type: i.toString()},
              )
 }
-console.log(data);
+
 const node = document.getElementById('graph')!;
 const container = new XYContainer<TimeDataRecord>(node, {
     components: [
