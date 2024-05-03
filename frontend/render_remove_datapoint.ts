@@ -23,7 +23,7 @@ for(let i =0; i<collection.length; i++){
         new_div.appendChild(delete_button);
         new_div.appendChild(delete_hidden);
         //new_table_data1.innerHTML = collection[i][1];
-        new_table_data2.innerHTML = '1';
+        new_table_data2.innerHTML = collection[i][2];
         new_table_data3.innerHTML = collection[i][3];
         new_table_data3.appendChild(new_div);
         //new_row.appendChild(new_table_data1);
@@ -38,10 +38,12 @@ for(let i =0; i<collection.length; i++){
 async function sendNewDatapoint(habitname: string): Promise <void>  {
     console.log(chosenDate, 'chosendate');
     const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;
+    const datapoint_range = document.querySelector('#datapoint_range') as HTMLInputElement;
     const formData = new FormData(sendDatapoint);
     formData.append("new_datapoint_name", habitname);
     //let now = moment().format("YY, M, D");
     formData.append("new_datapoint_date", chosenDate);
+    formData.append("new_datapoint_time", datapoint_range.value);
     console.log(formData);
     try {
         const container = document.getElementById("send_new_datapoint")!;
