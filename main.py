@@ -42,6 +42,22 @@ def make_key():
     result_str = ''.join(random.choice(letters) for i in range(20))
     return result_str
 
+def get_collection(user):
+    con = get_db()
+    cur = con.cursor()
+    j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+    collection = j.fetchall()
+    con.commit()
+    return collection
+
+def get_habits(user):
+    con = get_db()
+    cur = con.cursor()
+    n = cur.execute("SELECT habit FROM habits WHERE login = ? ", (user,))
+    habits = n.fetchall()
+    con.commit()
+    return habits
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -90,12 +106,8 @@ def handle_profile_post():
         #time.sleep(2)
         try:
             cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
-            j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
-            collection = j.fetchall()
-            n = cur.execute("""
-                                                        SELECT habit FROM habits WHERE login = ?
-                                                        """, (user,))
-            habits = n.fetchall()
+            collection = get_collection(user)
+            habits = get_habits(user)
             for q in range(0, len(habits)):
                 habits[q] = habits[q][0]
             con.commit()
@@ -110,10 +122,10 @@ def handle_profile_post():
             cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
                             VALUES(?, ?, ?, ?, ?)""",
                         (user, new_datapoint_name, new_datapoint_date, new_datapoint_time, new_datapoint))
-            j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
-            collection = j.fetchall()
+            collection = get_collection(user)
+            habits = get_habits(user)
             con.commit()
-            return jsonify({'status': 'ok', "collection": collection})
+            return jsonify({'status': 'ok', "collection": collection, "habits": habits})
         except IntegrityError as e:
             print("datapoint already exists!, ", type(e))
             con.commit()
@@ -125,12 +137,8 @@ def handle_profile_post():
             if i.fetchone() is not None:
                 cur.execute("DELETE FROM datapoints WHERE habit = ? and login = ?", (habit_delete, user))
                 cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
-                j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
-                collection = j.fetchall()
-                n = cur.execute("""
-                                            SELECT habit FROM habits WHERE login = ?
-                                            """, (user,))
-                habits = n.fetchall()
+                collection = get_collection(user)
+                habits = get_habits(user)
                 for q in range(0, len(habits)):
                     habits[q] = habits[q][0]
                 con.commit()
@@ -145,12 +153,8 @@ def handle_profile_post():
             i = cur.execute("SELECT comment FROM datapoints where habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
             if i.fetchone() is not None:
                 cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ? and occasion = ?", (datapoint_delete_name, datapoint_delete, datapoint_delete_date))
-                j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
-                collection = j.fetchall()
-                n = cur.execute("""
-                                                    SELECT habit FROM habits WHERE login = ?
-                                                    """, (user,))
-                habits = n.fetchall()
+                collection = get_collection(user)
+                habits = get_habits(user)
                 for q in range(0, len(habits)):
                     habits[q] = habits[q][0]
                 con.commit()
@@ -174,17 +178,8 @@ def profile():
                     """, (authkey,))
         welcome = i.fetchone()
         user = welcome[0]
-        i = cur.execute("""
-                    SELECT habit FROM habits WHERE login = ?
-                    """, (user,))
-        habits = i.fetchall()
-
-        j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
-        collection = j.fetchall()
-        #       reducing list of tuples to list of strings
-        # for q in range(0, len(habits)):
-        #     habits[q] = habits[q][0]
-
+        collection = get_collection(user)
+        habits = get_habits(user)
 
         if welcome is not None:
             body = render_template("welcome.html", error=error, collection=collection, habits=habits)

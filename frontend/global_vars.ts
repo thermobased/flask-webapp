@@ -1,11 +1,11 @@
 // TODO: change the collection type to this and make sure the code uses it correctly:
-
-// type Collection = {
-//   habit: string
-//   occasion: string
-//   datapoint: number
-//   comment: string
-// }
+/*
+type Collection = {
+  habit: string
+  occasion: string
+  datapoint: number
+  comment: string
+}*/
 type Collection = [string, string, number, string];
 
 export var collection: Collection[] = [];
