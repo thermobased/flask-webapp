@@ -47,6 +47,17 @@ def get_collection(user):
     cur = con.cursor()
     j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
     collection = j.fetchall()
+    new_collection = []
+    for i in collection:
+        j = {
+            "habit": i[0],
+            "occasion": i[1],
+            "datapoint": i[2],
+            "comment": i[3]
+        }
+        new_collection.append(j)
+    print('old collection: ', collection)
+    print('new collection: ', new_collection)
     con.commit()
     return collection
 

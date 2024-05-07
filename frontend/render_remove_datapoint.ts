@@ -1,20 +1,20 @@
 import moment from 'moment';
 import { chosenDate, collection, habitname, habits, updateCollection, updateHabits } from './global_vars';
-
-export function renderDatapoints(collection: any, habitname: any, date: any) {
+import {Collection} from './global_vars';
+export function renderDatapoints(collection: Collection[], habitname: string, date: string) {
     var table = document.getElementById('table')!;
     table.innerHTML = '';
 for(let i =0; i<collection.length; i++){
     console.log(date, 'renderdatapoints date');
-    if(collection[i][0] == habitname && collection[i][1] == date){
+    if(collection[i].habit == habitname && collection[i].occasion == date){
         let delete_button = document.createElement('input');
         let delete_hidden = document.createElement('input');
         delete_button.setAttribute('type', 'submit');
         delete_button.setAttribute('value', 'Delete');
-        delete_button.setAttribute('name', collection[i][3]);
+        delete_button.setAttribute('name', collection[i].comment);
         delete_hidden.setAttribute('type', 'hidden');
         delete_hidden.setAttribute('name', 'datapoint_delete');
-        delete_hidden.setAttribute('value', collection[i][3]);
+        delete_hidden.setAttribute('value', collection[i].comment);
         let new_row = document.createElement('tr');
         //let new_table_data1 = document.createElement('td');
         let new_table_data2 = document.createElement('td');
@@ -23,8 +23,8 @@ for(let i =0; i<collection.length; i++){
         new_div.appendChild(delete_button);
         new_div.appendChild(delete_hidden);
         //new_table_data1.innerHTML = collection[i][1];
-        new_table_data2.innerHTML = collection[i][2];
-        new_table_data3.innerHTML = collection[i][3];
+        new_table_data2.innerHTML = collection[i].datapoint.toString();
+        new_table_data3.innerHTML = collection[i].comment;
         new_table_data3.appendChild(new_div);
         //new_row.appendChild(new_table_data1);
         new_row.appendChild(new_table_data3);
@@ -46,7 +46,7 @@ async function sendNewDatapoint(habitname: string): Promise <void>  {
     formData.append("new_datapoint_time", datapoint_range.value);
     console.log(formData);
     try {
-        const container = document.getElementById("send_new_datapoint")!;
+        const container = document.getElementById("send_new_datapoint") as HTMLFormElement;
         var loadingIndicator = document.createElement("div");
         loadingIndicator.id = "loading_indicator"
         container.appendChild(loadingIndicator);
