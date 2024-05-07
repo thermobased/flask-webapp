@@ -1,33 +1,32 @@
 // TODO: change the collection type to this and make sure the code uses it correctly:
-/*
-type Collection = {
+export type Collection = {
   habit: string
   occasion: string
   datapoint: number
   comment: string
-}*/
-type Collection = [string, string, number, string];
+}
+/*type Collection = [string, string, number, string];*/
 
 export var collection: Collection[] = [];
-export function updateCollection(x: [Collection]) {
+export function updateCollection(x: Collection[]) {
   collection = x;
 }
 
 export var habits: string[] = [];
-export function updateHabits(x: any) {
+export function updateHabits(x: string[]) {
   habits = x;
 }
 
 export var habitname: string = "";
-export function updateHabitname(x: any) {
+export function updateHabitname(x: string) {
   habitname = x;
 }
 
-export var chosenDate: any;
-export function updateChosenDate(x: any) {
+export var chosenDate: string;
+export function updateChosenDate(x: string) {
   chosenDate = x;
 }
-export var deleteValue: any;
-export function updateDeleteValue(x: any) {
+export var deleteValue: string;
+export function updateDeleteValue(x: string) {
   deleteValue = x;
 }

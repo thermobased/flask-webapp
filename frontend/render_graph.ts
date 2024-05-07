@@ -11,7 +11,7 @@ type TimeDataRecord = {
 let data: TimeDataRecord[] = [];
 for(let i = 0; i<collection.length; i++){
     data.push(
-        {timestamp: moment(collection[i][1], "YY, M, D").unix()/24/60/60, length: collection[i][2], type: i.toString()},
+        {timestamp: moment(collection[i].occasion, "YY, M, D").unix()/24/60/60, length: collection[i].datapoint, type: i.toString()},
              )
 }
 

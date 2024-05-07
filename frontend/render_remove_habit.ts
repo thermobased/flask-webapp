@@ -81,17 +81,7 @@ export function renderHabits(new_habits: any) {
         div2.appendChild(delete_button);
         div2.appendChild(expand_form);
     }
-    /*let send_new_habit = createElementWithAttributes("form",
-        {
-            'type': 'submit',
-            'id': 'send_new_habit',
-        }
-    );
-    send_new_habit.addEventListener('submit', () => {
-        sendNewHabit();
-    });*/
 }
-
 
 function eraseDatapoints() {
     var table = document.getElementById('table')!;
@@ -190,7 +180,7 @@ async function sendNewHabit() {
         loadingIndicator.remove();
     }
 }
-function datapointRangeSlider () {
+function addDatapointRangeSlider () {
     var datapoint_range = document.querySelector('#datapoint_range') as HTMLInputElement;
     var datapoint_range_value = document.querySelector('#datapoint_range_value') as HTMLOutputElement;
     datapoint_range_value.textContent = datapoint_range.value;
@@ -204,9 +194,9 @@ function datapointRangeSlider () {
 window.addEventListener("load", (event) => {
     const ssrHabits = document.getElementById('habits-script')!;
     updateHabits(JSON.parse(ssrHabits.textContent!));
-    datapointRangeSlider();
-
+    addDatapointRangeSlider();
     renderHabits(habits);
+
     var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
     newHabit.addEventListener("submit", (event) => {
         event.preventDefault();
