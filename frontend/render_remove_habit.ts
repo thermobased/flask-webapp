@@ -97,14 +97,20 @@ async function removeHabit(): Promise<void> {
         console.log(formData);
         const container = document.querySelector("#habits_list div")!;
 
+        let obj: any = {};
+        formData.forEach((value, key) => obj[key] = value);
+
         var loadingIndicator = document.createElement("div");
         loadingIndicator.id = "loading_indicator"
         container.appendChild(loadingIndicator);
 
         try {
-            const response = await fetch("/api/profile", {
-                method: "POST",
-                body: formData,
+            const response = await fetch("/api/delete_habit", {
+                method: 'POST',
+                body: JSON.stringify(obj),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
             var x = await response.json();
             console.log(x);
@@ -124,38 +130,25 @@ async function removeHabit(): Promise<void> {
     }
 }
 
-
-/*async function expandHabit(): Promise<void> {
-        const formData = new FormData();
-        formData.append("habit_expand", expandValue);
-        console.log(formData);
-        try {
-            const response = await fetch("/habit_expand", {
-                method: "POST",
-                body: formData,
-            });
-/!*            var x = await response.json();
-            console.log(x);*!/
-        } catch (e) {
-            console.error(e);
-        }
-
-}*/
-
-
 async function sendNewHabit() {
     var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
     const formData = new FormData(newHabit);
     const container = document.getElementById("submit_new_habit_container")!;
+
+    let obj: any = {};
+    formData.forEach((value, key) => obj[key] = value);
 
     var loadingIndicator = document.createElement("div");
     loadingIndicator.id = "loading_indicator";
     container.appendChild(loadingIndicator);
 
     try {
-        const response = await fetch("/api/profile", {
-            method: "POST",
-            body: formData,
+        const response = await fetch("/api/new_habit", {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
         var x = await response.json();
         console.log(x);

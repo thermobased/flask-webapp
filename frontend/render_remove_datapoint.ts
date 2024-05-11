@@ -36,23 +36,28 @@ for(let i =0; i<collection.length; i++){
 
 
 async function sendNewDatapoint(habitname: string): Promise <void>  {
-    console.log(chosenDate, 'chosendate');
     const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;
     const datapoint_range = document.querySelector('#datapoint_range') as HTMLInputElement;
     const formData = new FormData(sendDatapoint);
     formData.append("new_datapoint_name", habitname);
-    //let now = moment().format("YY, M, D");
     formData.append("new_datapoint_date", chosenDate);
     formData.append("new_datapoint_time", datapoint_range.value);
-    console.log(formData);
+
+    let obj: any = {};
+    formData.forEach((value, key) => obj[key] = value);
+
     try {
         const container = document.getElementById("send_new_datapoint") as HTMLFormElement;
         var loadingIndicator = document.createElement("div");
         loadingIndicator.id = "loading_indicator"
         container.appendChild(loadingIndicator);
-        const response = await fetch("/api/profile", {
-            method: "POST",
-            body: formData,
+
+        const response = await fetch("/api/new_datapoint", {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
 
         var x = await response.json();
@@ -77,15 +82,22 @@ async function removeDatapoint(habitname: string): Promise <void>  {
     const formData = new FormData(removeDatapointForm);
     formData.append("datapoint_delete_name", habitname);
     formData.append("datapoint_delete_date", chosenDate);
-    console.log(formData, "< --- removedatapoint formdata");
+
+    let obj: any = {};
+    formData.forEach((value, key) => obj[key] = value);
+
     try {
         const container = document.getElementById("remove_datapoint")!;
         var loadingIndicator = document.createElement("div");
         loadingIndicator.id = "loading_indicator"
         container.appendChild(loadingIndicator);
-        const response = await fetch("/api/profile", {
-            method: "POST",
-            body: formData,
+
+        const response = await fetch("/api/delete_datapoint", {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
 
         var x = await response.json();
