@@ -112,70 +112,90 @@ def handle_profile_post():
     con = get_db()
     cur = con.cursor()
     user = get_user()
-    new_habit = request.form.get("new_habit")
-    new_datapoint = request.form.get("new_datapoint")
-    new_datapoint_name = request.form.get("new_datapoint_name")
-    habit_delete = request.form.get("habit_delete")
-    new_datapoint_date = request.form.get("new_datapoint_date")
-    datapoint_delete = request.form.get("datapoint_delete")
-    datapoint_delete_name = request.form.get("datapoint_delete_name")
-    datapoint_delete_date = request.form.get("datapoint_delete_date")
-    new_datapoint_time = request.form.get("new_datapoint_time")
-    if new_habit:
-        #time.sleep(2)
-        try:
-            cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
+    
+
+@app.route("/api/new_habit", methods=['POST'])
+def new_habit():
+    con = get_db()
+    cur = con.cursor()
+    user = get_user()
+    new_habit = request.json.get("new_habit")
+    try:
+        cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
+        collection = get_collection(user)
+        habits = get_habits(user)
+        con.commit()
+        return jsonify({'status': 'ok', "collection": collection, "habits": habits})
+    except IntegrityError as e:
+        print("habit already exists!, ", e)
+        con.commit()
+        return jsonify({'status': 'error', 'error': str(e)})
+
+
+@app.route("/api/new_datapoint", methods=['POST'])
+def new_datapoint():
+    con = get_db()
+    cur = con.cursor()
+    user = get_user()
+    new_datapoint = request.json.get("new_datapoint")
+    new_datapoint_name = request.json.get("new_datapoint_name")
+    new_datapoint_date = request.json.get("new_datapoint_date")
+    new_datapoint_time = request.json.get("new_datapoint_time")
+    try:
+        cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
+                        VALUES(?, ?, ?, ?, ?)""",
+                    (user, new_datapoint_name, new_datapoint_date, new_datapoint_time, new_datapoint))
+        collection = get_collection(user)
+        habits = get_habits(user)
+        con.commit()
+        return jsonify({'status': 'ok', "collection": collection, "habits": habits})
+    except IntegrityError as e:
+        print("datapoint already exists!, ", type(e))
+        con.commit()
+        return jsonify({'status': 'error', 'error': str(e)})
+
+
+@app.route("/api/delete_habit", methods=['POST'])
+def delete_habit():
+    con = get_db()
+    cur = con.cursor()
+    user = get_user()
+    habit_delete = request.json.get("habit_delete")
+    try:
+        i = cur.execute("SELECT habit FROM habits where habit = ? and login = ?", (habit_delete, user))
+        if i.fetchone() is not None:
+            cur.execute("DELETE FROM datapoints WHERE habit = ? and login = ?", (habit_delete, user))
+            cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
             collection = get_collection(user)
             habits = get_habits(user)
             con.commit()
             return jsonify({'status': 'ok', "collection": collection, "habits": habits})
-        except IntegrityError as e:
-            print("habit already exists!, ", e)
-            con.commit()
-            return jsonify({'status': 'error', 'error': str(e)})
-    if new_datapoint:
-        #time.sleep(2)
-        try:
-            cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
-                            VALUES(?, ?, ?, ?, ?)""",
-                        (user, new_datapoint_name, new_datapoint_date, new_datapoint_time, new_datapoint))
+    except IntegrityError as e:
+        print("couldn't delete habit!, ", type(e))
+        con.commit()
+        return jsonify({'status': 'error', 'error': str(e)})
+
+
+@app.route("/api/delete_datapoint", methods=['POST'])
+def delete_datapoint():
+    con = get_db()
+    cur = con.cursor()
+    user = get_user()
+    datapoint_delete = request.json.get("datapoint_delete")
+    datapoint_delete_name = request.json.get("datapoint_delete_name")
+    datapoint_delete_date = request.json.get("datapoint_delete_date")
+    try:
+        i = cur.execute("SELECT comment FROM datapoints where habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
+        if i.fetchone() is not None:
+            cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ? and occasion = ?", (datapoint_delete_name, datapoint_delete, datapoint_delete_date))
             collection = get_collection(user)
             habits = get_habits(user)
             con.commit()
             return jsonify({'status': 'ok', "collection": collection, "habits": habits})
-        except IntegrityError as e:
-            print("datapoint already exists!, ", type(e))
-            con.commit()
-            return jsonify({'status': 'error', 'error': str(e)})
-    if habit_delete:
-        #time.sleep(2)
-        try:
-            i = cur.execute("SELECT habit FROM habits where habit = ? and login = ?", (habit_delete, user))
-            if i.fetchone() is not None:
-                cur.execute("DELETE FROM datapoints WHERE habit = ? and login = ?", (habit_delete, user))
-                cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
-                collection = get_collection(user)
-                habits = get_habits(user)
-                con.commit()
-                return jsonify({'status': 'ok', "collection": collection, "habits": habits})
-        except IntegrityError as e:
-            print("couldn't delete habit!, ", type(e))
-            con.commit()
-            return jsonify({'status': 'error', 'error': str(e)})
-    if datapoint_delete:
-        # time.sleep(2)
-        try:
-            i = cur.execute("SELECT comment FROM datapoints where habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
-            if i.fetchone() is not None:
-                cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ? and occasion = ?", (datapoint_delete_name, datapoint_delete, datapoint_delete_date))
-                collection = get_collection(user)
-                habits = get_habits(user)
-                con.commit()
-                return jsonify({'status': 'ok', "collection": collection, "habits": habits})
-        except IntegrityError as e:
-            print("couldn't delete habit!, ", type(e))
-            con.commit()
-            return jsonify({'status': 'error', 'error': str(e)})
+    except IntegrityError as e:
+        print("couldn't delete habit!, ", type(e))
+        con.commit()
+        return jsonify({'status': 'error', 'error': str(e)})
 
 
 @app.route("/profile", methods=['GET'])
