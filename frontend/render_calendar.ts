@@ -3,7 +3,7 @@ import { collection, habits, habitname, chosenDate, updateChosenDate, updateColl
 import moment, {MomentFormatSpecification} from "moment";
 
 export function renderCalendar() {
-    function setChosenDate(kek: any){
+    function setChosenDate(kek: string){
         updateChosenDate(kek);
         console.log("chosenDate set");
     }
