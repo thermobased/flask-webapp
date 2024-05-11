@@ -1,9 +1,8 @@
 import {
-    collection, deleteValue,
+    collection,
     habitname,
     habits,
     updateCollection,
-    updateDeleteValue,
     updateHabitname,
     updateHabits
 } from './global_vars';
@@ -53,8 +52,7 @@ export function renderHabits(new_habits: string[]) {
         );
         delete_button.innerHTML = "Delete";
         delete_button.addEventListener('click', () => {
-            updateDeleteValue(new_habits[i]);
-            removeHabit();
+            removeHabit(new_habits[i]);
         });
 
         let expand = createElementWithAttributes("button",
@@ -90,7 +88,7 @@ function confirmDelete() {
     }
 }
 
-async function removeHabit(): Promise<void> {
+async function removeHabit(deleteValue: string): Promise<void> {
     if (confirmDelete()) {
         const formData = new FormData();
         formData.append("habit_delete", deleteValue);
