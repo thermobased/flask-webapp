@@ -28,7 +28,7 @@ def register():
     con = get_db()
     cur = con.cursor()
     try:
-        cur.execute("INSERT INTO items(login, password) VALUES(?, ?)", (u, p))
+        cur.execute("INSERT INTO users(login, password) VALUES(?, ?)", (u, p))
         con.commit()
         return redirect(url_for('main'))
     except IntegrityError as e:
@@ -42,7 +42,19 @@ def make_key():
     result_str = ''.join(random.choice(letters) for i in range(20))
     return result_str
 
-def get_collection(user):
+
+def get_user():
+    authkey = request.cookies.get('authkey')
+    con = get_db()
+    cur = con.cursor()
+    i = cur.execute("""
+                        SELECT login FROM sessions WHERE cookie_key = ?
+                        """, (authkey,))
+    (user, ) = i.fetchone()
+    return user
+
+
+def get_collection(user: str):
     con = get_db()
     cur = con.cursor()
     j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
@@ -59,13 +71,16 @@ def get_collection(user):
     print('old collection: ', collection)
     print('new collection: ', new_collection)
     con.commit()
-    return collection
+    return new_collection
 
-def get_habits(user):
+
+def get_habits(user: str) -> list[str]:
     con = get_db()
     cur = con.cursor()
     n = cur.execute("SELECT habit FROM habits WHERE login = ? ", (user,))
     habits = n.fetchall()
+    for q in range(0, len(habits)):
+        habits[q] = habits[q][0]
     con.commit()
     return habits
 
@@ -80,7 +95,7 @@ def login():
     con = get_db()
     cur = con.cursor()
     i = cur.execute("""
-        SELECT login FROM items WHERE login = ? and password = ?
+        SELECT login FROM users WHERE login = ? and password = ?
         """, (u, p))
     if i.fetchone() is None:
         resp = make_response(redirect(url_for('main')))
@@ -94,16 +109,9 @@ def login():
 
 @app.route("/api/profile", methods=['POST'])
 def handle_profile_post():
-    global user
-    authkey = request.cookies.get('authkey')
     con = get_db()
     cur = con.cursor()
-    i = cur.execute("""
-                        SELECT login FROM sessions WHERE cookie_key = ?
-                        """, (authkey,))
-    welcome = i.fetchone()
-    user = welcome[0]
-
+    user = get_user()
     new_habit = request.form.get("new_habit")
     new_datapoint = request.form.get("new_datapoint")
     new_datapoint_name = request.form.get("new_datapoint_name")
@@ -119,8 +127,6 @@ def handle_profile_post():
             cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
             collection = get_collection(user)
             habits = get_habits(user)
-            for q in range(0, len(habits)):
-                habits[q] = habits[q][0]
             con.commit()
             return jsonify({'status': 'ok', "collection": collection, "habits": habits})
         except IntegrityError as e:
@@ -150,8 +156,6 @@ def handle_profile_post():
                 cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
                 collection = get_collection(user)
                 habits = get_habits(user)
-                for q in range(0, len(habits)):
-                    habits[q] = habits[q][0]
                 con.commit()
                 return jsonify({'status': 'ok', "collection": collection, "habits": habits})
         except IntegrityError as e:
@@ -166,8 +170,6 @@ def handle_profile_post():
                 cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ? and occasion = ?", (datapoint_delete_name, datapoint_delete, datapoint_delete_date))
                 collection = get_collection(user)
                 habits = get_habits(user)
-                for q in range(0, len(habits)):
-                    habits[q] = habits[q][0]
                 con.commit()
                 return jsonify({'status': 'ok', "collection": collection, "habits": habits})
         except IntegrityError as e:
@@ -178,7 +180,6 @@ def handle_profile_post():
 
 @app.route("/profile", methods=['GET'])
 def profile():
-    global user
     if request.method == 'GET':
         error = request.args.get('error')
         authkey = request.cookies.get('authkey')
@@ -188,23 +189,23 @@ def profile():
                     SELECT login FROM sessions WHERE cookie_key = ?
                     """, (authkey,))
         welcome = i.fetchone()
-        user = welcome[0]
-        collection = get_collection(user)
-        habits = get_habits(user)
 
         if welcome is not None:
+            (user,) = welcome
+            collection = get_collection(user)
+            habits = get_habits(user)
             body = render_template("welcome.html", error=error, collection=collection, habits=habits)
-            return render_template("main.html", title="Profile", body=body, name=welcome[0])
+            return render_template("main.html", title="Profile", body=body, name=user)
         else:
             return redirect(url_for('main'))
 
 
 @app.route("/habit_expand", methods=['GET'])
 def habit_expand():
-    global user
-    habit = request.args.get("habit_to_expand")
     con = get_db()
     cur = con.cursor()
+    user = get_user()
+    habit = request.args.get("habit_to_expand")
     try:
         j = cur.execute("SELECT occasion, datapoint, comment FROM datapoints WHERE login = ? and habit = ?", (user, habit))
         collection = j.fetchall()

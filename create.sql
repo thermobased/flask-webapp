@@ -1,4 +1,4 @@
-CREATE TABLE items (
+CREATE TABLE users (
   id INTEGER PRIMARY KEY,
   login TEXT UNIQUE,
   password BLOB
@@ -7,7 +7,7 @@ CREATE TABLE items (
 CREATE TABLE sessions (
   login TEXT,
   cookie_key TEXT,
-  FOREIGN KEY(login) REFERENCES items(login)
+  FOREIGN KEY(login) REFERENCES users(login)
 );
 
 CREATE TABLE habits (
@@ -15,7 +15,7 @@ CREATE TABLE habits (
   login TEXT,
   habit TEXT,
   UNIQUE(login, habit)
-  FOREIGN KEY(login) REFERENCES items(login)
+  FOREIGN KEY(login) REFERENCES users(login)
 );
 
 CREATE TABLE datapoints (
