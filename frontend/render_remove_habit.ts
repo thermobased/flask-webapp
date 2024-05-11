@@ -29,7 +29,8 @@ export function renderHabits(new_habits: any) {
 
         return el;
     }
-
+    var div2 = document.querySelector("#habit_selector")!;
+    div2.innerHTML = "";
     for (let i = 0; i < new_habits.length; i++) {
         let btn = createElementWithAttributes("button",
             {
@@ -41,10 +42,6 @@ export function renderHabits(new_habits: any) {
         btn.addEventListener('click', () => {
             Choice_habit(new_habits[i]);
         });
-
-        // input1.addEventListener('click', () => {
-        //    updateDeleteValue(new_habits[i]);
-        // });
 
         btn.innerHTML = new_habits[i];
 
@@ -75,7 +72,6 @@ export function renderHabits(new_habits: any) {
                 'action' : '/habit_expand',
                 'method' : 'get',
             });
-        var div2 = document.querySelector("#habit_selector")!;
         expand_form.appendChild(expand);
         div2.appendChild(btn);
         div2.appendChild(delete_button);
@@ -115,7 +111,6 @@ async function removeHabit(): Promise<void> {
             if (x.status == 'ok') {
                 updateCollection(x.collection);
                 updateHabits(x.habits);
-                document.getElementById("delete_habit")!.innerHTML = "";
                 renderHabits(habits);
                 eraseDatapoints();
             } else {
@@ -167,8 +162,6 @@ async function sendNewHabit() {
         if (x.status == 'ok') {
             updateCollection(x.collection);
             updateHabits(x.habits);
-            document.getElementById("delete_habit")!.innerHTML = "";
-
             renderHabits(habits);
         } else {
             console.log(`sendNewHabit: server responded with ${JSON.stringify(x)}`);
