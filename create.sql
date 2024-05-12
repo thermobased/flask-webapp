@@ -19,6 +19,7 @@ CREATE TABLE habits (
 );
 
 CREATE TABLE datapoints (
+  id INTEGER PRIMARY KEY,
   login TEXT,
   habit TEXT,
   occasion TEXT,

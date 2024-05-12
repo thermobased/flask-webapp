@@ -57,15 +57,16 @@ def get_user():
 def get_collection(user: str):
     con = get_db()
     cur = con.cursor()
-    j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+    j = cur.execute("SELECT id, habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
     collection = j.fetchall()
     new_collection = []
     for i in collection:
         j = {
-            "habit": i[0],
-            "occasion": i[1],
-            "datapoint": i[2],
-            "comment": i[3]
+            "id": i[0],
+            "habit": i[1],
+            "occasion": i[2],
+            "datapoint": i[3],
+            "comment": i[4]
         }
         new_collection.append(j)
     print('old collection: ', collection)

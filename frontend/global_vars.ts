@@ -1,11 +1,10 @@
-// TODO: change the collection type to this and make sure the code uses it correctly:
 export type Collection = {
+  id: number,
   habit: string
   occasion: string
   datapoint: number
   comment: string
 }
-/*type Collection = [string, string, number, string];*/
 
 export var collection: Collection[] = [];
 export function updateCollection(x: Collection[]) {
