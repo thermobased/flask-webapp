@@ -1,7 +1,7 @@
 [![workflow](https://github.com/thermobased/flask-webapp/actions/workflows/python-package.yml/badge.svg)](https://github.com/thermobased/flask-webapp/actions)
 [![workflow](https://github.com/thermobased/flask-webapp/actions/workflows/node.js.yml/badge.svg)](https://github.com/thermobased/flask-webapp/actions)
 
-## Dependencies
+## Python Backend: Installing Dependencies
 
 We virtualenv to reproduce Python development environment, the list of
 dependency packages is in requirements.txt. To get the development environment,
@@ -17,7 +17,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Building
+## Typescript Frontend: Building
 
 Build frontend typescript code and bundle it with dependencies to `static/js/`:
 
@@ -35,7 +35,3 @@ npm run make-static
    # Run webserver
    flask --app main run
    ```
-
-## Development
-
-You can add `strict: true` to tsconfig.json to make your compilation stricter.
