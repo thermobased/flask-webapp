@@ -7,38 +7,49 @@ export function renderCalendar() {
         updateChosenDate(kek);
         console.log("chosenDate set");
     }
+
+    const now = moment().day();
+    console.log(now, ' <-- now');
+    
+    function createCalendarCell(i: number){
+        const weekday = document.createElement('button');
+        weekday.setAttribute('value', moment().day(i).format("YY, M, D"));
+        weekday.setAttribute('class', 'dates');
+            let kek = weekday.value;
+            weekday.addEventListener('click', () => {
+                setChosenDate(kek);
+                renderDatapoints(collection, habitname, kek);
+            });
+            let dayOfWeek = moment().day(i).date();
+            console.log(dayOfWeek, " <-- day(i)");
+            if(moment().date() == dayOfWeek){
+                weekday.setAttribute('id', 'todays');
+            }
+            weekday.innerHTML = dayOfWeek.toString();
+            return weekday;
+    }
+
     const firstWeek = document.querySelector(".first_week_row")!;
     const secondWeek = document.querySelector(".second_week_row")!;
-    let now = moment().day(0);
         firstWeek.innerHTML = '';
         secondWeek.innerHTML = '';
-    for(let i = -6; i<=0; i++){
-        const weekday = document.createElement('button');
-        weekday.setAttribute('class', 'dates');
-        weekday.setAttribute('value', moment(now).day(i).format("YY, M, D"));
-        let kek = weekday.value;
-        weekday.addEventListener('click', () => {
-            setChosenDate(kek);
-            renderDatapoints(collection, habitname, kek);
-        });
-        let tempDate = moment(now).day(i).date();
-        weekday.innerHTML = tempDate.toString();
-        firstWeek.appendChild(weekday);
-    }
-    for(let i = 1; i<=7; i++){
-        const weekday = document.createElement('button');
-        weekday.setAttribute('class', 'dates');
-        weekday.setAttribute('value', moment(now).day(i).format("YY, M, D"));
-        let kek = weekday.value;
-        weekday.addEventListener('click', () => {
-            setChosenDate(kek);
-            renderDatapoints(collection, habitname, kek);
-        });
-        let tempDate = moment(now).day(i).date();
-        if(moment().date() == tempDate){
-            weekday.setAttribute('id', 'todays');
+
+    if(moment().day() == 0){
+        for(let i = -13; i<=-7; i++){
+            firstWeek.appendChild(createCalendarCell(i));
         }
-        weekday.innerHTML = tempDate.toString();
-        secondWeek.appendChild(weekday);
+        for(let i = -6; i<=0; i++){
+            secondWeek.appendChild(createCalendarCell(i));
+        }
+    } else {
+        for(let i = -6; i<=0; i++){
+            firstWeek.appendChild(createCalendarCell(i));
+        }
+        
+        for(let i = 1; i<=7; i++){
+            secondWeek.appendChild(createCalendarCell(i));
+        }
     }
+
 }
+

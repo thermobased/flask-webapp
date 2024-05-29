@@ -26,7 +26,3 @@ export var chosenDate: string;
 export function updateChosenDate(x: string) {
   chosenDate = x;
 }
-export var deleteValue: string;
-export function updateDeleteValue(x: string) {
-  deleteValue = x;
-}
