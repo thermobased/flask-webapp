@@ -160,7 +160,6 @@ def handle_profile_post():
             return jsonify({'status': 'error', 'error': str(e)})
 
 
-
 @app.route("/profile", methods=['GET'])
 def profile():
     global user
@@ -191,6 +190,24 @@ def profile():
             return render_template("main.html", title="Profile", body=body, name=welcome[0])
         else:
             return redirect(url_for('main'))
+
+
+@app.route("/habit_expand", methods=['GET'])
+def habit_expand():
+    global user
+    habit = request.args.get("habit_to_expand")
+    con = get_db()
+    cur = con.cursor()
+    try:
+        j = cur.execute("SELECT occasion, datapoint, comment FROM datapoints WHERE login = ? and habit = ?", (user, habit))
+        collection = j.fetchall()
+        con.commit()
+        body = render_template("habit_expand.html", collection=collection, habit_name=habit)
+        return render_template("main.html", title="expand", body=body, name=user)
+
+    except IntegrityError as e:
+        con.commit()
+        return jsonify({'status': 'error', 'error': str(e)})
 
 
 @app.route("/logout", methods=['POST'])
