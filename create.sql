@@ -20,12 +20,13 @@ CREATE TABLE habits (
 
 CREATE TABLE datapoints (
   login TEXT,
+  id TEXT UNIQUE,
   habit TEXT,
   occasion TEXT,
   datapoint INTEGER,
   comment TEXT,
   FOREIGN KEY(login, habit) REFERENCES habits(login, habit)
-  UNIQUE(login, habit, occasion, comment)
+  --UNIQUE(login, habit, occasion, comment)
 );
 
 --CREATE TABLE days (habit INTEGER, den TEXT, FOREIGN KEY (habit) REFERENCES habits(id));

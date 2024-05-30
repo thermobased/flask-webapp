@@ -57,7 +57,7 @@ def get_user():
 def get_collection(user: str):
     con = get_db()
     cur = con.cursor()
-    j = cur.execute("SELECT habit, occasion, datapoint, comment FROM datapoints WHERE login = ?", (user,))
+    j = cur.execute("SELECT habit, occasion, datapoint, comment, id FROM datapoints WHERE login = ?", (user,))
     collection = j.fetchall()
     new_collection = []
     for i in collection:
@@ -65,7 +65,8 @@ def get_collection(user: str):
             "habit": i[0],
             "occasion": i[1],
             "datapoint": i[2],
-            "comment": i[3]
+            "comment": i[3],
+            "id": i[4]
         }
         new_collection.append(j)
     print('old collection: ', collection)
@@ -141,10 +142,11 @@ def new_datapoint():
     new_datapoint_name = request.json.get("new_datapoint_name")
     new_datapoint_date = request.json.get("new_datapoint_date")
     new_datapoint_time = request.json.get("new_datapoint_time")
+    new_id = str(random.getrandbits(64))
     try:
-        cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment)
-                        VALUES(?, ?, ?, ?, ?)""",
-                    (user, new_datapoint_name, new_datapoint_date, new_datapoint_time, new_datapoint))
+        cur.execute("""INSERT INTO datapoints (login, habit, occasion, datapoint, comment, id)
+                        VALUES(?, ?, ?, ?, ?, ?)""",
+                    (user, new_datapoint_name, new_datapoint_date, new_datapoint_time, new_datapoint, new_id))
         collection = get_collection(user)
         habits = get_habits(user)
         con.commit()
@@ -181,17 +183,17 @@ def delete_datapoint():
     con = get_db()
     cur = con.cursor()
     user = get_user()
-    datapoint_delete = request.json.get("datapoint_delete")
+    datapoint_delete_id = request.json.get("datapoint_delete")
     datapoint_delete_name = request.json.get("datapoint_delete_name")
     datapoint_delete_date = request.json.get("datapoint_delete_date")
     try:
-        i = cur.execute("SELECT comment FROM datapoints where habit = ? and comment = ?", (datapoint_delete_name, datapoint_delete))
-        if i.fetchone() is not None:
-            cur.execute("DELETE FROM datapoints WHERE habit = ? and comment = ? and occasion = ?", (datapoint_delete_name, datapoint_delete, datapoint_delete_date))
-            collection = get_collection(user)
-            habits = get_habits(user)
-            con.commit()
-            return jsonify({'status': 'ok', "collection": collection, "habits": habits})
+        sql_del = cur.execute("DELETE FROM datapoints WHERE login = ? and id = ?", (user, datapoint_delete_id))
+        collection = get_collection(user)
+        habits = get_habits(user)
+        con.commit()
+        if sql_del.rowcount != 1:
+            return print("delete_datapoint did not delete exactly 1 row")
+        return jsonify({'status': 'ok', "collection": collection, "habits": habits})
     except IntegrityError as e:
         print("couldn't delete habit!, ", type(e))
         con.commit()

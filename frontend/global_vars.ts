@@ -4,6 +4,7 @@ export type Collection = {
   occasion: string
   datapoint: number
   comment: string
+  id: string
 }
 /*type Collection = [string, string, number, string];*/
 

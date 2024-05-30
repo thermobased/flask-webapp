@@ -30,7 +30,12 @@ export function renderHabits(new_habits: string[]) {
     }
     var div2 = document.querySelector("#habit_selector")!;
     div2.innerHTML = "";
+    
+
     for (let i = 0; i < new_habits.length; i++) {
+        var divka = createElementWithAttributes("div", {
+            'class': 'habit_container'
+        });
         let btn = createElementWithAttributes("button",
             {
                 'type': 'button',
@@ -47,6 +52,7 @@ export function renderHabits(new_habits: string[]) {
         let delete_button = createElementWithAttributes("button",
             { //'type' : 'submit',
                 'value': 'Delete',
+                'id': 'delete_habit',
                 'name': new_habits[i]
             }
         );
@@ -71,10 +77,12 @@ export function renderHabits(new_habits: string[]) {
                 'method' : 'get',
             });
         expand_form.appendChild(expand);
-        div2.appendChild(btn);
-        div2.appendChild(delete_button);
-        div2.appendChild(expand_form);
+        divka.appendChild(btn);
+        divka.appendChild(delete_button);
+        divka.appendChild(expand_form);
+        div2.appendChild(divka);
     }
+    
 }
 
 function eraseDatapoints() {
@@ -187,6 +195,3 @@ window.addEventListener("load", (event) => {
         sendNewHabit();
     });
 });
-/*    const delete_habit_form = document.querySelector("#delete_habit");
-    delete_habit_form.addEventListener("submit", (event) => {
-        removeHabit();*/
