@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { collection, habits, habitname, chosenDate, updateChosenDate, updateCollection, updateHabits } from './global_vars';
 import { renderCalendar } from './render_calendar';
 import { renderHabits } from './render_remove_habit';
@@ -8,6 +9,7 @@ import { renderHabits } from './render_remove_habit';
 window.addEventListener("load", (event) => {
     const ssrCollection = document.getElementById('collection-script')!;
     updateCollection(JSON.parse(ssrCollection.textContent!));
+    updateChosenDate(moment().format("YY, M, D"));
     renderCalendar();
 
     const ssrHabits = document.getElementById('habits-script')!;

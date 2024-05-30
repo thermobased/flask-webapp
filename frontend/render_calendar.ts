@@ -5,20 +5,20 @@ import moment, {MomentFormatSpecification} from "moment";
 export function renderCalendar() {
     function setChosenDate(kek: string){
         updateChosenDate(kek);
-        console.log("chosenDate set");
     }
-
-    const now = moment().day();
-    console.log(now, ' <-- now');
     
     function createCalendarCell(i: number){
         const weekday = document.createElement('button');
         weekday.setAttribute('value', moment().day(i).format("YY, M, D"));
         weekday.setAttribute('class', 'dates');
             let kek = weekday.value;
-            weekday.addEventListener('click', () => {
+            weekday.addEventListener('click', (ev) => {
+                const old = document.querySelector(".dates.currently_selected");
+                if(old !== null){old.className = "dates";}
+                ((ev.target as Element).className) = "dates currently_selected";
                 setChosenDate(kek);
                 renderDatapoints(collection, habitname, kek);
+
             });
             let dayOfWeek = moment().day(i).date();
             console.log(dayOfWeek, " <-- day(i)");
@@ -34,6 +34,7 @@ export function renderCalendar() {
         firstWeek.innerHTML = '';
         secondWeek.innerHTML = '';
 
+//-------- if today is sunday ----------
     if(moment().day() == 0){
         for(let i = -13; i<=-7; i++){
             firstWeek.appendChild(createCalendarCell(i));
@@ -41,6 +42,7 @@ export function renderCalendar() {
         for(let i = -6; i<=0; i++){
             secondWeek.appendChild(createCalendarCell(i));
         }
+//-------- if today is not sunday ----------
     } else {
         for(let i = -6; i<=0; i++){
             firstWeek.appendChild(createCalendarCell(i));

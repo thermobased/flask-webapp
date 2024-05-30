@@ -180,6 +180,9 @@
     border-color: black;
     padding: 1px;
 }
+.dates.currently_selected {
+    animation: animate 1.5s linear infinite;
+}
 .weekdays{
     text-align:center;
     border-style: dashed;
@@ -187,9 +190,6 @@
     border-radius: 2px;
     border-color: black;
     padding: 1px;
-}
-.weeks_calendar_wrapper{
-
 }
 
 #graph {
@@ -200,3 +200,15 @@
     max-height: 200px;
     max-width: 200px;
 }
+
+@keyframes animate{ 
+    0%{ 
+      opacity: 0.1; 
+    } 
+    50%{ 
+      opacity: 0.7; 
+    } 
+    100%{ 
+      opacity: 0.1; 
+    } 
+  } 
