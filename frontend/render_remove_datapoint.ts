@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { chosenDate, collection, habitname, habits, updateCollection, updateHabits } from './global_vars';
 import {Collection} from './global_vars';
+
 export function renderDatapoints(collection: Collection[], habitname: string, date: string) {
     var table = document.getElementById('table')!;
     table.innerHTML = '';
@@ -36,7 +37,6 @@ for(let i =0; i<collection.length; i++){
 }
 }
 }
-
 
 async function sendNewDatapoint(habitname: string): Promise <void>  {
     const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;
@@ -119,7 +119,6 @@ async function removeDatapoint(id: string): Promise <void>  {
     }
 
 }
-
 
 window.addEventListener("load", (event) => {
     const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;

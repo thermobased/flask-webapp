@@ -80,7 +80,6 @@
 }
 
 #choose_habit{
-    background-color: transparent;
     border: none;
     color: black;
     cursor: pointer;
@@ -129,6 +128,9 @@
 }
 .habits_container form {
     display: inline;
+}
+.habitname.currently_selected {
+    background-color: gray;
 }
 
 #loading_indicator {

@@ -39,11 +39,15 @@ export function renderHabits(new_habits: string[]) {
         let btn = createElementWithAttributes("button",
             {
                 'type': 'button',
+                'class': 'habitname',
                 'id': 'choose_habit',
                 'value': new_habits[i]
             }
         );
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (ev) => {
+            const old = document.querySelector(".habitname.currently_selected");
+                if(old !== null){old.className = "habitname";}
+                ((ev.target as Element).className) = "habitname currently_selected";
             Choice_habit(new_habits[i]);
         });
 
