@@ -164,14 +164,11 @@ def delete_habit():
     user = get_user()
     habit_delete = request.json.get("habit_delete")
     try:
-        i = cur.execute("SELECT habit FROM habits where habit = ? and login = ?", (habit_delete, user))
-        if i.fetchone() is not None:
-            cur.execute("DELETE FROM datapoints WHERE habit = ? and login = ?", (habit_delete, user))
-            cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
-            collection = get_collection(user)
-            habits = get_habits(user)
-            con.commit()
-            return jsonify({'status': 'ok', "collection": collection, "habits": habits})
+        cur.execute("DELETE FROM habits WHERE habit = ? and login = ?", (habit_delete, user))
+        collection = get_collection(user)
+        habits = get_habits(user)
+        con.commit()
+        return jsonify({'status': 'ok', "collection": collection, "habits": habits})
     except IntegrityError as e:
         print("couldn't delete habit!, ", type(e))
         con.commit()

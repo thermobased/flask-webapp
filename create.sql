@@ -25,7 +25,7 @@ CREATE TABLE datapoints (
   occasion TEXT,
   datapoint INTEGER,
   comment TEXT,
-  FOREIGN KEY(login, habit) REFERENCES habits(login, habit)
+  FOREIGN KEY(login, habit) REFERENCES habits(login, habit) ON DELETE CASCADE
   --UNIQUE(login, habit, occasion, comment)
 );
 
