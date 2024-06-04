@@ -103,7 +103,7 @@ async function removeHabit(deleteValue: string): Promise<void> {
         console.log(formData);
         const container = document.querySelector("#habits_list div")!;
 
-        let obj: any = {};
+        let obj: { [key: string]: FormDataEntryValue } = {};
         formData.forEach((value, key) => obj[key] = value);
 
         var loadingIndicator = document.createElement("div");
@@ -141,7 +141,7 @@ async function sendNewHabit() {
     const formData = new FormData(newHabit);
     const container = document.getElementById("submit_new_habit_container")!;
 
-    let obj: any = {};
+    let obj: { [key: string]: FormDataEntryValue } = {};
     formData.forEach((value, key) => obj[key] = value);
 
     var loadingIndicator = document.createElement("div");

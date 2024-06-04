@@ -46,7 +46,7 @@ async function sendNewDatapoint(habitname: string): Promise <void>  {
     formData.append("new_datapoint_date", chosenDate);
     formData.append("new_datapoint_time", datapoint_range.value);
 
-    let obj: any = {};
+    let obj: { [key: string]: FormDataEntryValue } = {};
     formData.forEach((value, key) => obj[key] = value);
 
     try {
@@ -86,7 +86,7 @@ async function removeDatapoint(id: string): Promise <void>  {
     formData.append("datapoint_delete", id);
     formData.append("datapoint_delete_date", chosenDate);
     //console.log(formData);
-    let obj: any = {};
+    let obj: { [key: string]: FormDataEntryValue } = {};
     formData.forEach((value, key) => obj[key] = value);
 
     try {
