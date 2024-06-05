@@ -1,26 +1,37 @@
-import {XYContainer, Timeline, StackedBar, Axis} from '@unovis/ts'
+import {XYContainer, Timeline, StackedBar, Axis, Area} from '@unovis/ts'
 import moment from "moment"
 import { collection } from './global_vars';
 
-type TimeDataRecord = {
-    timestamp: number; // Position on the X axis. Can be `number` or `Date`
-    length: number; // Length of the line in X axis values, i.e. milliseconds if you use `Date`
-    type: string; // The row it will be displayed in
+type DataRecord = {
+    x: number,
+    y: number
 }
 
-let data: TimeDataRecord[] = [];
-for(let i = 0; i<collection.length; i++){
-    data.push(
-        {timestamp: moment(collection[i].occasion, "YY, M, D").unix()/24/60/60, length: collection[i].datapoint, type: i.toString()},
-             )
-}
+let data: DataRecord[] = [];
 
-const node = document.getElementById('graph')!;
-const container = new XYContainer<TimeDataRecord>(node, {
+
+export function renderAreaChart (){
+
+    for(let i = 0; i<collection.length; i++){
+        data.push(
+            {
+                x: i, y: i+Math.random()
+            }
+                 )
+                 console.log(data[i]);
+    }
+    const node = document.querySelector('#area_chart') as HTMLElement;
+    const container = new XYContainer<DataRecord>(node, {
     components: [
-        new Timeline<TimeDataRecord>({
-            x: (d: TimeDataRecord) => d.timestamp,
-            showLabels: true
-        })
+      new Area<DataRecord>({
+      x: (d: DataRecord) => d.x, 
+      y: (d: DataRecord) => d.y
+    })
     ]
-}, data)
+  }, data)
+}
+
+window.addEventListener("load", (event) => {
+    renderAreaChart();
+});
+
