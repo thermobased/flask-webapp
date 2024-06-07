@@ -149,6 +149,10 @@
     }
 }
 
+#weeks_calendar_wrapper {
+    height: fit-content;
+}
+
 #calendar{
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
@@ -201,6 +205,10 @@
     padding: 1px;
 }
 
+#datapoints_control {
+    height: fit-content;
+}
+
 #graph {
     max-height: 200px;
     max-width: 200px;
@@ -208,6 +216,9 @@
 #graph2 {
     max-height: 200px;
     max-width: 200px;
+}
+.area_chart {
+    height: 30%;
 }
 
 @keyframes animate{ 
