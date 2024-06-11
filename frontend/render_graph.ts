@@ -12,46 +12,32 @@ let data: DataRecord[] = [];
 function getTwoWeeksDates ():string[] {
 
     let twoWeeksDates: string[] = [];
-    //-------- if today is sunday ----------
-    if(moment().day() == 0){
-        for(let i = -13; i<=-7; i++){
-            twoWeeksDates.push(moment().day(i).format('YY, M, D'));
-        }
-        for(let i = -6; i<=0; i++){
-            twoWeeksDates.push(moment().day(i).format('YY, M, D'));
-        }
-    //-------- if today is not sunday ----------
-    } else {
-        for(let i = -6; i<=0; i++){
-            twoWeeksDates.push(moment().day(i).format('YY, M, D'));
-        }
-        
-        for(let i = 1; i<=7; i++){
-            twoWeeksDates.push(moment().day(i).format('YY, M, D'));
-        }
+    for(let i = -13; i <= 0; i++ ){
+        twoWeeksDates.push(moment().add(i, 'days').format('YY, M, D'));
     }
+
     return twoWeeksDates;
 }
 
 export function renderAreaChart (){
-
     let cnt = 0;
+    let totalIntensity: number[] = Array(habits.length).fill(0);
     const twoWeeksDates: string[] = getTwoWeeksDates();
-    for(let i = 0; i <= 13; i++){
-        let totalIntensity: number[] = [];
-        for(let j = 0; j < habits.length; j++){
-            for(let k = 0; k < collection.length; k++){ 
+    for(let i = 0; i <= 13; i++){ //for each of 14 days
+        for(let j = 0; j < habits.length; j++){ //for each habit
+            for(let k = 0; k < collection.length; k++){ //for each datapoint 
                 if(collection[k].habit == habits[j] && collection[k].occasion == twoWeeksDates[i]){
                     cnt  += collection[k].datapoint;
                 }
             }
         totalIntensity[j] = cnt;
+        cnt = 0;
         }
         data[i] = {
             x: i,
             y: totalIntensity
         }
-        cnt = 0;
+        totalIntensity = [];
     }
 
     type accessors = (d: DataRecord) => number;
