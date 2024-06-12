@@ -25,7 +25,6 @@ export function renderCalendar() {
 
             });
             let dayOfWeek = moment().day(i).date();
-            console.log(dayOfWeek, " <-- day(i)");
             if(moment().date() == dayOfWeek){
                 weekday.setAttribute('id', 'todays');
                 pastToday = true;

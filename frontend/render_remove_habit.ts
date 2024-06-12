@@ -7,6 +7,7 @@ import {
     updateHabits
 } from './global_vars';
 import {renderDatapoints} from "./render_remove_datapoint";
+import { getTwoWeeksDates, renderAreaChart } from './render_graph';
 
 function Choice_habit(habit: string) {
     updateHabitname(habit);
@@ -129,6 +130,7 @@ async function removeHabit(deleteValue: string): Promise<void> {
                 updateHabits(x.habits);
                 renderHabits(habits);
                 eraseDatapoints();
+                renderAreaChart(collection, habits, getTwoWeeksDates());
             } else {
                 console.log(`sendNewHabit: server responded with ${JSON.stringify(x)}`);
             }
@@ -166,6 +168,7 @@ async function sendNewHabit() {
             updateCollection(x.collection);
             updateHabits(x.habits);
             renderHabits(habits);
+            renderAreaChart(collection, habits, getTwoWeeksDates());
         } else {
             console.log(`sendNewHabit: server responded with ${JSON.stringify(x)}`);
         }

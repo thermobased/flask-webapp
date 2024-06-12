@@ -1,4 +1,3 @@
-// TODO: change the collection type to this and make sure the code uses it correctly:
 export type Collection = {
   habit: string
   occasion: string
@@ -6,7 +5,6 @@ export type Collection = {
   comment: string
   id: string
 }
-/*type Collection = [string, string, number, string];*/
 
 export var collection: Collection[] = [];
 export function updateCollection(x: Collection[]) {

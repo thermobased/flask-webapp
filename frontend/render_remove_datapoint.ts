@@ -1,6 +1,8 @@
 import moment from 'moment';
 import { chosenDate, collection, habitname, habits, updateCollection, updateHabits } from './global_vars';
 import {Collection} from './global_vars';
+import { renderCalendar } from './render_calendar';
+import { getTwoWeeksDates, renderAreaChart } from './render_graph';
 
 export function renderDatapoints(collection: Collection[], habitname: string, date: string) {
     var table = document.getElementById('table')!;
@@ -70,6 +72,7 @@ async function sendNewDatapoint(habitname: string): Promise <void>  {
             updateCollection(x.collection);
             updateHabits(x.habits);
             renderDatapoints(collection, habitname, chosenDate);
+            renderAreaChart(collection, habits, getTwoWeeksDates());
         }
         else {
             loadingIndicator.remove();
@@ -110,6 +113,7 @@ async function removeDatapoint(id: string): Promise <void>  {
             updateCollection(x.collection);
             updateHabits(x.habits);
             renderDatapoints(collection, habitname, chosenDate);
+            renderAreaChart(collection, habits, getTwoWeeksDates());
         }
         else {
             loadingIndicator.remove();

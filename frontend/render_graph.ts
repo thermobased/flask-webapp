@@ -1,28 +1,32 @@
 import {XYContainer, Timeline, StackedBar, Axis, Area} from '@unovis/ts'
 import moment from "moment"
-import { collection, habits } from './global_vars';
+import { Collection, collection, habits, updateCollection, updateHabits } from './global_vars';
 
-type DataRecord = {
-    x: number,
-    y: number[]
+function removeAllChildNodes(parent: HTMLElement) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
 }
 
-let data: DataRecord[] = [];
-
-function getTwoWeeksDates ():string[] {
+export function getTwoWeeksDates ():string[] {
 
     let twoWeeksDates: string[] = [];
     for(let i = -13; i <= 0; i++ ){
         twoWeeksDates.push(moment().add(i, 'days').format('YY, M, D'));
     }
-
     return twoWeeksDates;
 }
 
-export function renderAreaChart (){
+export function renderAreaChart (collection: Collection[], habits: string[], twoWeeksDates: string[]){
+
+    type DataRecord = {
+        x: number,
+        y: number[]
+    }
+
+    let data: DataRecord[] = [];
     let cnt = 0;
     let totalIntensity: number[] = Array(habits.length).fill(0);
-    const twoWeeksDates: string[] = getTwoWeeksDates();
     for(let i = 0; i <= 13; i++){ //for each of 14 days
         for(let j = 0; j < habits.length; j++){ //for each habit
             for(let k = 0; k < collection.length; k++){ //for each datapoint 
@@ -47,6 +51,7 @@ export function renderAreaChart (){
     }
 
     const node = document.querySelector('#area_chart') as HTMLElement;
+    removeAllChildNodes(node);
     const container = new XYContainer<DataRecord>(node, {
     components: [
       new Area<DataRecord>({
@@ -58,6 +63,11 @@ export function renderAreaChart (){
 }
 
 window.addEventListener("load", (event) => {
-    renderAreaChart();
+    event.preventDefault();
+    const ssrHabits = document.getElementById('habits-script')!;
+    const ssrCollection = document.getElementById('collection-script')!;
+    updateHabits(JSON.parse(ssrHabits.textContent!));
+    updateCollection(JSON.parse(ssrCollection.textContent!));
+    renderAreaChart(collection, habits, getTwoWeeksDates());
 });
 
