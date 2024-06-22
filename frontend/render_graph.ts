@@ -62,12 +62,12 @@ export function renderAreaChart (collection: Collection[], habits: string[], two
   }, data)
 }
 
-window.addEventListener("load", (event) => {
+/* window.addEventListener("load", (event) => {
     event.preventDefault();
     const ssrHabits = document.getElementById('habits-script')!;
     const ssrCollection = document.getElementById('collection-script')!;
     updateHabits(JSON.parse(ssrHabits.textContent!));
     updateCollection(JSON.parse(ssrCollection.textContent!));
     renderAreaChart(collection, habits, getTwoWeeksDates());
-});
+}); */
 

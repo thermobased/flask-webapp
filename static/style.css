@@ -16,7 +16,11 @@
     padding: 1px;
 }
 
+
 .body_main{
+    width: 70vw;
+    justify-content:space-between;
+    margin: auto;
     display: flex;
     flex-direction: row;
     border-style: dashed;
@@ -99,7 +103,7 @@
     padding: 1px;
 }
 .datapoints_container{
-    width:50%;
+    width: 80%;
     border-style: dashed;
     border-width: 2px;
     border-radius: 2px;

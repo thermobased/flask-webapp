@@ -8,39 +8,34 @@ export function renderDatapoints(collection: Collection[], habitname: string, da
     var table = document.getElementById('table')!;
     table.innerHTML = '';
 for(let i =0; i<collection.length; i++){
-    console.log(date, 'renderdatapoints date');
-    if(collection[i].habit == habitname && collection[i].occasion == date){
+    console.log(collection);
+    if(collection[i].habit == habitname && collection[i].occasion == date || collection[i].habit === undefined && collection[i].occasion == date){
+        console.log('OK!');
         let delete_button = document.createElement('button');
-        //let delete_hidden = document.createElement('input');
         delete_button.setAttribute('type', 'button');
         delete_button.innerHTML = "Delete";
         delete_button.setAttribute('name', collection[i].id);
-        //delete_hidden.setAttribute('type', 'hidden');
-        //delete_hidden.setAttribute('name', 'datapoint_delete');
-        //delete_hidden.setAttribute('value', collection[i].id);
         delete_button.addEventListener("click", (ev) => {
             removeDatapoint((ev.target as HTMLButtonElement).name);
             });
         let new_row = document.createElement('tr');
-        //let new_table_data1 = document.createElement('td');
         let new_table_data2 = document.createElement('td');
         let new_table_data3 = document.createElement('td');
         let new_div = document.createElement('div');
+
         new_div.appendChild(delete_button);
-        //new_div.appendChild(delete_hidden);
-        //new_table_data1.innerHTML = collection[i][1];
         new_table_data2.innerHTML = collection[i].datapoint.toString();
         new_table_data3.innerHTML = collection[i].comment;
         new_table_data3.appendChild(new_div);
-        //new_row.appendChild(new_table_data1);
         new_row.appendChild(new_table_data3);
         new_row.appendChild(new_table_data2);
+        console.log(new_row);
         table.appendChild(new_row);
 }
 }
 }
 
-async function sendNewDatapoint(habitname: string): Promise <void>  {
+export async function sendNewDatapoint(habitname: string): Promise <void>  {
     const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;
     const datapoint_range = document.querySelector('#datapoint_range') as HTMLInputElement;
     const formData = new FormData(sendDatapoint);
@@ -83,7 +78,7 @@ async function sendNewDatapoint(habitname: string): Promise <void>  {
 
 }
 
-async function removeDatapoint(id: string): Promise <void>  {
+export async function removeDatapoint(id: string): Promise <void>  {
     const removeDatapointForm = document.getElementById("remove_datapoint") as HTMLFormElement;
     const formData = new FormData(removeDatapointForm);
     formData.append("datapoint_delete", id);
@@ -124,7 +119,7 @@ async function removeDatapoint(id: string): Promise <void>  {
 
 }
 
-window.addEventListener("load", (event) => {
+/* window.addEventListener("load", (event) => {
     const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;
     sendDatapoint.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -135,5 +130,5 @@ window.addEventListener("load", (event) => {
         event.preventDefault();
         removeDatapoint(habitname);
     });
-});
+}); */
 

@@ -1,6 +1,9 @@
 <script id="collection-script" type="application/json">
     {{collection|tojson}}
   </script>
+<script id="habit_name-script" type="application/json">
+    {{habit_name|tojson}}
+  </script>
 
 
 <div>
@@ -10,8 +13,29 @@
     <div id="year_chart_container">
         <div id="year_chart">
             <script type="text/javascript" src="{{ url_for('static', filename='js/expand_render_chart.js') }}"></script>
+            <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/init.js') }}"></script> -->
             
         </div>
     </div>
+
+
+    <div id="datapoints_control">
+        <form id="remove_datapoint">
+        <table id="table" class="habits_table">
+
+        </table>
+        </form>
+
+        <form id="send_new_datapoint">
+            <input type="text" id="new_datapoint" name="new_datapoint" required>
+            <input type="range" step="5" min="5" max="60" value="5" id="datapoint_range">
+            <p>Value: <output id="datapoint_range_value"></output> minutes</p>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+
+    </div>
+
+
 </div>
 

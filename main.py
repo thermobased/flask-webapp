@@ -69,8 +69,6 @@ def get_collection(user: str):
             "id": i[4]
         }
         new_collection.append(j)
-    print('old collection: ', collection)
-    print('new collection: ', new_collection)
     con.commit()
     return new_collection
 
@@ -226,10 +224,19 @@ def habit_expand():
     user = get_user()
     habit = request.args.get("habit_to_expand")
     try:
-        j = cur.execute("SELECT occasion, datapoint, comment FROM datapoints WHERE login = ? and habit = ?", (user, habit))
+        j = cur.execute("SELECT occasion, datapoint, comment, id FROM datapoints WHERE login = ? and habit = ?", (user, habit))
         collection = j.fetchall()
+        new_collection = []
+        for i in collection:
+            j = {
+                "occasion": i[0],
+                "datapoint": i[1],
+                "comment": i[2],
+                "id": i[3]
+            }
+        new_collection.append(j)
         con.commit()
-        body = render_template("habit_expand.html", collection=collection, habit_name=habit)
+        body = render_template("habit_expand.html", collection=new_collection, habit_name=habit)
         return render_template("main.html", title="expand", body=body, name=user)
 
     except IntegrityError as e:

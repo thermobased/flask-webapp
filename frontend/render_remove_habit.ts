@@ -101,7 +101,7 @@ function confirmDelete() {
     }
 }
 
-async function removeHabit(deleteValue: string): Promise<void> {
+export async function removeHabit(deleteValue: string): Promise<void> {
     if (confirmDelete()) {
         const formData = new FormData();
         formData.append("habit_delete", deleteValue);
@@ -142,7 +142,7 @@ async function removeHabit(deleteValue: string): Promise<void> {
     }
 }
 
-async function sendNewHabit() {
+export async function sendNewHabit() {
     var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
     const formData = new FormData(newHabit);
     const container = document.getElementById("submit_new_habit_container")!;
@@ -179,7 +179,7 @@ async function sendNewHabit() {
         loadingIndicator.remove();
     }
 }
-function addDatapointRangeSlider () {
+export function addDatapointRangeSlider () {
     var datapoint_range = document.querySelector('#datapoint_range') as HTMLInputElement;
     var datapoint_range_value = document.querySelector('#datapoint_range_value') as HTMLOutputElement;
     datapoint_range_value.textContent = datapoint_range.value;
@@ -190,15 +190,10 @@ function addDatapointRangeSlider () {
 
 
 
-window.addEventListener("load", (event) => {
+/* window.addEventListener("load", (event) => {
     const ssrHabits = document.getElementById('habits-script')!;
     updateHabits(JSON.parse(ssrHabits.textContent!));
-    addDatapointRangeSlider();
-    renderHabits(habits);
 
-    var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
-    newHabit.addEventListener("submit", (event) => {
-        event.preventDefault();
-        sendNewHabit();
-    });
-});
+
+
+}); */

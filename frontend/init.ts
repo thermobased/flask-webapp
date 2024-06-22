@@ -1,7 +1,9 @@
 import moment from 'moment';
 import { collection, habits, habitname, chosenDate, updateChosenDate, updateCollection, updateHabits } from './global_vars';
 import { renderCalendar } from './render_calendar';
-import { renderHabits } from './render_remove_habit';
+import { addDatapointRangeSlider, renderHabits, sendNewHabit } from './render_remove_habit';
+import { removeDatapoint, sendNewDatapoint } from './render_remove_datapoint';
+import { getTwoWeeksDates, renderAreaChart } from './render_graph';
 
 // This code reads special <script type="text/json"> elements on the page
 // where the server puts initial values of collection and habits variables. It
@@ -9,10 +11,28 @@ import { renderHabits } from './render_remove_habit';
 window.addEventListener("load", (event) => {
     const ssrCollection = document.getElementById('collection-script')!;
     updateCollection(JSON.parse(ssrCollection.textContent!));
-    updateChosenDate(moment().format("YY, M, D"));
-    renderCalendar();
 
     const ssrHabits = document.getElementById('habits-script')!;
     updateHabits(JSON.parse(ssrHabits.textContent!));
+
+    updateChosenDate(moment().format("YY, M, D"));
+    renderCalendar();
     renderHabits(habits);
+    addDatapointRangeSlider();
+    var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;
+    newHabit.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendNewHabit(); 
+    });
+    const sendDatapoint = document.getElementById("send_new_datapoint") as HTMLFormElement;
+    sendDatapoint.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendNewDatapoint(habitname);
+    });
+    const removeDatapointForm = document.getElementById("remove_datapoint") as HTMLFormElement;
+    removeDatapointForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        removeDatapoint(habitname);
+    });
+    renderAreaChart(collection, habits, getTwoWeeksDates());
 });
