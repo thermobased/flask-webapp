@@ -29,6 +29,7 @@ function createElementWithAttributes<K extends keyof HTMLElementTagNameMap>
 
 
 function renderYearChart() {
+    console.log(collection, "< -- initial chart collection value");
 
     const year_chart = document.querySelector('#year_chart') as HTMLElement;
     
@@ -54,16 +55,19 @@ function renderYearChart() {
                 'type': 'button'
             });
 
+            divka.setAttribute("name", moment().dayOfYear(i*7+j).format('YY, M, D'));
+            divka.addEventListener("click", (ev) => {
+                renderDatapoints(collection, expand_habit, (ev.target as HTMLButtonElement).name);
+                });
+            var cnt = 0;
             for(let k = 0; k<collection.length; k++){
                 if(collection[k].occasion == moment().dayOfYear(i*7+j).format('YY, M, D')){
-                    divka.setAttribute("name", collection[k].occasion);
-                    
-                    divka.addEventListener("click", (ev) => {
-                        renderDatapoints(collection, expand_habit, (ev.target as HTMLButtonElement).name);
-                        console.log(expand_habit, (ev.target as HTMLButtonElement).name);
-                        });
+                    cnt+=collection[k].datapoint;
                 }
-            
+            if(cnt > 0 && cnt < 30){divka.style.backgroundColor = '#86db98';}
+            else if(cnt >= 30 && cnt < 60){divka.style.backgroundColor = '#47a15a';}
+            else if(cnt >= 60){divka.style.backgroundColor = '#156125';}
+            cnt = 0;
             
 
             //divka.innerHTML = (i*7+j).toString(); //to see which day of the year the cell corresponds to
@@ -86,7 +90,6 @@ function renderYearChart() {
             lastWeek.removeChild(lastWeek.lastChild!);
     }
 
-        console.log(firstWeek, lastWeek);
     }
     
     

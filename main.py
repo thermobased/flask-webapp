@@ -229,13 +229,15 @@ def habit_expand():
         new_collection = []
         for i in collection:
             j = {
+                "habit": habit,
                 "occasion": i[0],
                 "datapoint": i[1],
                 "comment": i[2],
                 "id": i[3]
             }
-        new_collection.append(j)
+            new_collection.append(j)
         con.commit()
+        print(new_collection)
         body = render_template("habit_expand.html", collection=new_collection, habit_name=habit)
         return render_template("main.html", title="expand", body=body, name=user)
 

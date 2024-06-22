@@ -29,7 +29,6 @@ for(let i =0; i<collection.length; i++){
         new_table_data3.appendChild(new_div);
         new_row.appendChild(new_table_data3);
         new_row.appendChild(new_table_data2);
-        console.log(new_row);
         table.appendChild(new_row);
 }
 }
