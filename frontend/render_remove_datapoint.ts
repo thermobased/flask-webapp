@@ -8,7 +8,6 @@ export function renderDatapoints(collection: Collection[], habitname: string, da
     var table = document.getElementById('table')!;
     table.innerHTML = '';
 for(let i =0; i<collection.length; i++){
-    console.log(collection);
     if(collection[i].habit == habitname && collection[i].occasion == date || collection[i].habit === undefined && collection[i].occasion == date){
         console.log('OK!');
         let delete_button = document.createElement('button');

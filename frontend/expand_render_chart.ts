@@ -59,21 +59,23 @@ function renderYearChart() {
             divka.addEventListener("click", (ev) => {
                 renderDatapoints(collection, expand_habit, (ev.target as HTMLButtonElement).name);
                 });
+
+            var popup = createElementWithAttributes("span", {
+                'class': 'year_chart_popup'
+            });
             var cnt = 0;
             for(let k = 0; k<collection.length; k++){
                 if(collection[k].occasion == moment().dayOfYear(i*7+j).format('YY, M, D')){
                     cnt+=collection[k].datapoint;
                 }
+            }
             if(cnt > 0 && cnt < 30){divka.style.backgroundColor = '#86db98';}
             else if(cnt >= 30 && cnt < 60){divka.style.backgroundColor = '#47a15a';}
             else if(cnt >= 60){divka.style.backgroundColor = '#156125';}
+            popup.innerHTML = moment().dayOfYear(i*7+j).format('MMMM, Do').concat(" - ", cnt.toString());
             cnt = 0;
-            
-
-            //divka.innerHTML = (i*7+j).toString(); //to see which day of the year the cell corresponds to
             week.appendChild(divka);
-            }
-
+            divka.appendChild(popup);
             year_chart.appendChild(week);
         }
         }

@@ -248,12 +248,14 @@
   } 
 
 #year_chart_container {
+    position: relative;
     height: 35vh;
     width: 100%;
     
 }
 
 #year_chart {
+    position: relative;
     height: auto;
     display: grid;
     grid-template-columns: repeat(53, 1fr);
@@ -264,6 +266,7 @@ div .first_week {
 }
 
 .chart_week {
+    position: relative;
     display: flex;
     flex-direction: column;
     margin-top: 1%;
@@ -272,6 +275,7 @@ div .first_week {
 
 .chart_day {
 
+    position: relative;
     border-style: solid;
     border-color: grey;
     border-width: 1px;
@@ -279,8 +283,37 @@ div .first_week {
     background-color: #e2ebb2;
     padding: 7px;
     margin: 1px;
-
 }
-.chart_week button {
-    font-size: 3px;
+
+.chart_day .year_chart_popup {
+    z-index: 1;
+    position:absolute;
+    top:-22px;
+    right:9999px;
+    width:150px;
+    height: 15px;
+    text-align: center;
+    margin-right:-160px;
+    padding:10px;
+    color:#fff;
+    background:#333;
+            box-shadow:2px 2px 5px #aaa;
+    opacity:0;
+            transition:opacity 250ms ease-out;
+}
+.chart_day .year_chart_popup::before {
+    z-index: 1;
+    content:' ';
+    position:absolute;
+    top:50%;
+    left:-16px;
+    width:0;
+    height:0;
+
+    border:8px solid transparent;
+    border-right-color:#333;
+}
+.chart_day:hover .year_chart_popup {
+    right:-20px;
+    opacity:1;
 }
