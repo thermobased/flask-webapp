@@ -32,6 +32,13 @@ function renderYearChart() {
     console.log(collection, "< -- initial chart collection value");
 
     const year_chart = document.querySelector('#year_chart') as HTMLElement;
+    year_chart.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        year_chart.scrollBy({
+          left: event.deltaY < 0 ? -30 : 30,
+        });
+      });
+      
     
     for(let i = 0; i<53; i++){
 

@@ -81,10 +81,22 @@ export function renderHabits(new_habits: string[]) {
                 'action' : '/habit_expand',
                 'method' : 'get',
             });
+        
+        let edit_button = createElementWithAttributes("button",
+            {
+                'type': 'button',
+                'class': 'edit_button'
+            }
+        );
+        edit_button.innerHTML = 'Edit';
+        edit_button.addEventListener('click', (ev) => {
+            alert('in development');
+        });
         expand_form.appendChild(expand);
         divka.appendChild(btn);
         divka.appendChild(delete_button);
         divka.appendChild(expand_form);
+        divka.appendChild(edit_button);
         div2.appendChild(divka);
     }
     

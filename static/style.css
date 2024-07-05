@@ -251,7 +251,8 @@
     position: relative;
     height: 35vh;
     width: 100%;
-    
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #year_chart {
@@ -259,6 +260,14 @@
     height: auto;
     display: grid;
     grid-template-columns: repeat(53, 1fr);
+    overflow: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#year_chart -webkit-scrollbar {
+        display: none;
 }
 
 div .first_week {
