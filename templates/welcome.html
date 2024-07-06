@@ -39,13 +39,28 @@
             </div>
 
             <dialog class = "popup_new_habit_dialog">
+                <div class="popup_new_habit_dialog_container">
                 <button class = "popup_new_habit_close">Close</button>
+                <br>
                 <form id="send_new_habit">
                     Create new habit:
+                    <div id = "new_habit_inputs">
+                        Habit name:
                     <input type="text" id="new_habit" name="new_habit" required>
                     <br>
+                        Habit units:
+                    <input type="text" id="new_habit_unit" name="new_habit_unit" required>
+                    <br>
+                        Habit daily goal:
+                    <input type="text" id="new_habit_goal" name="new_habit_goal" required>
+                    <br>
+                        Habit chart color:
+                    <input type="color" id="new_habit_color" name="new_habit_color" required>
+                    <br>
                     <input type="submit" value="Submit">
+                    </div>
                 </form>
+                </div>
             </dialog>
 
 
