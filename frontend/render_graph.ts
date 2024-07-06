@@ -1,6 +1,6 @@
 import {XYContainer, Timeline, StackedBar, Axis, Area} from '@unovis/ts'
 import moment from "moment"
-import { Collection, collection, habits, updateCollection, updateHabits } from './global_vars';
+import { Collection, Habits, collection, habits, updateCollection, updateHabits } from './global_vars';
 
 function removeAllChildNodes(parent: HTMLElement) {
     while (parent.firstChild) {
@@ -17,7 +17,7 @@ export function getTwoWeeksDates ():string[] {
     return twoWeeksDates;
 }
 
-export function renderAreaChart (collection: Collection[], habits: string[], twoWeeksDates: string[]){
+export function renderAreaChart (collection: Collection[], habits: Habits[], twoWeeksDates: string[]){
 
     type DataRecord = {
         x: number,
@@ -30,7 +30,7 @@ export function renderAreaChart (collection: Collection[], habits: string[], two
     for(let i = 0; i <= 13; i++){ //for each of 14 days
         for(let j = 0; j < habits.length; j++){ //for each habit
             for(let k = 0; k < collection.length; k++){ //for each datapoint 
-                if(collection[k].habit == habits[j] && collection[k].occasion == twoWeeksDates[i]){
+                if(collection[k].habit == habits[j].habit && collection[k].occasion == twoWeeksDates[i]){
                     cnt  += collection[k].datapoint;
                 }
             }

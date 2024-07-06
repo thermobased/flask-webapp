@@ -76,12 +76,19 @@ def get_collection(user: str):
 def get_habits(user: str) -> list[str]:
     con = get_db()
     cur = con.cursor()
-    n = cur.execute("SELECT habit FROM habits WHERE login = ? ", (user,))
+    n = cur.execute("SELECT habit, unit, goal, color FROM habits WHERE login = ? ", (user,))
     habits = n.fetchall()
-    for q in range(0, len(habits)):
-        habits[q] = habits[q][0]
+    new_habits = []
+    for i in habits:
+            j = {
+                "habit": i[0],
+                "unit": i[1],
+                "goal": i[2],
+                "color": i[3]
+            }
+            new_habits.append(j)
     con.commit()
-    return habits
+    return new_habits
 
 
 @app.route("/login", methods=["POST"])
@@ -119,8 +126,11 @@ def new_habit():
     cur = con.cursor()
     user = get_user()
     new_habit = request.json.get("new_habit")
+    new_habit_unit = request.json.get("new_habit_unit")
+    new_habit_goal = request.json.get("new_habit_goal")
+    new_habit_color = request.json.get("new_habit_color")
     try:
-        cur.execute("INSERT INTO habits (login, habit) VALUES(?, ?)", (user, new_habit))
+        cur.execute("INSERT INTO habits (login, habit, unit, goal, color) VALUES(?, ?, ?, ?, ?)", (user, new_habit, new_habit_unit, new_habit_goal, new_habit_color))
         collection = get_collection(user)
         habits = get_habits(user)
         con.commit()

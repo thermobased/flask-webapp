@@ -14,6 +14,9 @@ CREATE TABLE habits (
   id INTEGER PRIMARY KEY,
   login TEXT,
   habit TEXT,
+  unit TEXT,
+  goal INTEGER,
+  color TEXT,
   UNIQUE(login, habit)
   FOREIGN KEY(login) REFERENCES users(login)
 );

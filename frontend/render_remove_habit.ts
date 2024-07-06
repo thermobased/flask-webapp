@@ -1,4 +1,5 @@
 import {
+    Habits,
     collection,
     habitname,
     habits,
@@ -20,7 +21,7 @@ function Choice_habit(habit: string) {
 
 
 
-export function renderHabits(new_habits: string[]) {
+export function renderHabits(habits: Habits[]) {
     function createElementWithAttributes<K extends keyof HTMLElementTagNameMap>
     (tagName: K, attrs: { [key: string]: string }): HTMLElementTagNameMap[K] {
         var el = document.createElement(tagName);
@@ -35,7 +36,7 @@ export function renderHabits(new_habits: string[]) {
     div2.innerHTML = "";
     
 
-    for (let i = 0; i < new_habits.length; i++) {
+    for (let i = 0; i < habits.length; i++) {
         var divka = createElementWithAttributes("div", {
             'class': 'habit_container'
         });
@@ -44,34 +45,34 @@ export function renderHabits(new_habits: string[]) {
                 'type': 'button',
                 'class': 'habitname',
                 'id': 'choose_habit',
-                'value': new_habits[i]
+                'value': habits[i].habit
             }
         );
         btn.addEventListener('click', (ev) => {
             const old = document.querySelector(".habitname.currently_selected");
                 if(old !== null){old.className = "habitname";}
                 ((ev.target as Element).className) = "habitname currently_selected";
-            Choice_habit(new_habits[i]);
+            Choice_habit(habits[i].habit);
         });
 
-        btn.innerHTML = new_habits[i];
+        btn.innerHTML = habits[i].habit;
 
         let delete_button = createElementWithAttributes("button",
             { //'type' : 'submit',
                 'value': 'Delete',
                 'id': 'delete_habit',
-                'name': new_habits[i]
+                'name': habits[i].habit
             }
         );
         delete_button.innerHTML = "Delete";
         delete_button.addEventListener('click', () => {
-            removeHabit(new_habits[i]);
+            removeHabit(habits[i].habit);
         });
 
         let expand = createElementWithAttributes("button",
             {
                 'type': 'submit',
-                'value': new_habits[i],
+                'value': habits[i].habit,
                 'name' : 'habit_to_expand',
             }
         );

@@ -6,13 +6,20 @@ export type Collection = {
   id: string
 }
 
+export type Habits = {
+  habit: string
+  unit: string
+  goal: number
+  color: string
+}
+
 export var collection: Collection[] = [];
 export function updateCollection(x: Collection[]) {
   collection = x;
 }
 
-export var habits: string[] = [];
-export function updateHabits(x: string[]) {
+export var habits: Habits[] = [];
+export function updateHabits(x: Habits[]) {
   habits = x;
 }
 
