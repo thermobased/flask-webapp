@@ -18,6 +18,7 @@
                 <script type="text/javascript" src="{{ url_for('static', filename='js/render_remove_datapoint.js') }}"></script>
                 <script type="text/javascript" src="{{ url_for('static', filename='js/init.js') }}"></script>
                 <script type="text/javascript" src="{{ url_for('static', filename='js/render_graph.js') }}"></script>
+
                 <form id="delete_habit">
                 </form>
 
@@ -32,13 +33,20 @@
         </div>
 
         <div class="submit_new_habit" id="submit_new_habit_container">
-            <form id="send_new_habit">
-                Create new habit:
-                <input type="text" id="new_habit" name="new_habit" required>
-                <br>
-                <input type="submit" value="Submit">
-            </form>
 
+            <div class = "popup_new_habit_button" id = "popup_new_habit_button">
+                Create new habit
+            </div>
+
+            <dialog class = "popup_new_habit_dialog">
+                <button class = "popup_new_habit_close">Close</button>
+                <form id="send_new_habit">
+                    Create new habit:
+                    <input type="text" id="new_habit" name="new_habit" required>
+                    <br>
+                    <input type="submit" value="Submit">
+                </form>
+            </dialog>
 
 
         </div>

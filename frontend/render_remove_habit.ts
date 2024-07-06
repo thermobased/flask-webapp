@@ -18,6 +18,8 @@ function Choice_habit(habit: string) {
     //renderDatapoints(collection, habitname);
 }
 
+
+
 export function renderHabits(new_habits: string[]) {
     function createElementWithAttributes<K extends keyof HTMLElementTagNameMap>
     (tagName: K, attrs: { [key: string]: string }): HTMLElementTagNameMap[K] {

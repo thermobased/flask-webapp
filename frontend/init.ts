@@ -35,4 +35,20 @@ window.addEventListener("load", (event) => {
         removeDatapoint(habitname);
     });
     renderAreaChart(collection, habits, getTwoWeeksDates());
+
+    const popupButton = document.querySelector('.popup_new_habit_button') as HTMLElement;
+    const popupDialog = document.querySelector('.popup_new_habit_dialog') as HTMLDialogElement;
+    const popupClose = document.querySelector('.popup_new_habit_close') as HTMLButtonElement;
+
+
+    popupButton.addEventListener("click", (ev) => {
+    popupDialog.showModal();
+    });
+    
+    popupClose.addEventListener("click", (ev) => {
+    popupDialog.close();
+    }); 
+    
+
+
 });
