@@ -19,9 +19,16 @@ export function getTwoWeeksDates ():string[] {
 
 export function renderAreaChart (collection: Collection[], habits: Habits[], twoWeeksDates: string[]){
 
+    var colors: string[] = [];
+    for(let i = 0; i<habits.length; i++){
+    colors.push(habits[i].color);
+    }
+    console.log(habits);
+
+
     type DataRecord = {
         x: number,
-        y: number[]
+        y: number[],
     }
 
     let data: DataRecord[] = [];
@@ -39,7 +46,7 @@ export function renderAreaChart (collection: Collection[], habits: Habits[], two
         }
         data[i] = {
             x: i,
-            y: totalIntensity
+            y: totalIntensity,
         }
         totalIntensity = [];
     }
@@ -56,7 +63,8 @@ export function renderAreaChart (collection: Collection[], habits: Habits[], two
     components: [
       new Area<DataRecord>({
       x: (d: DataRecord) => d.x,
-      y: theAccessors
+      y: theAccessors,
+      color: colors
     })
     ]
   }, data)
