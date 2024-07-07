@@ -348,4 +348,11 @@ div .first_week {
     height: 20vw;
     width: 35vw;
 }
+
+.indicator_circle {
+    height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+    display: inline-block;
+}
   

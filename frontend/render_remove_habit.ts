@@ -95,8 +95,14 @@ export function renderHabits(habits: Habits[]) {
         edit_button.addEventListener('click', (ev) => {
             alert('in development');
         });
+        let indicatorCircle = createElementWithAttributes("span",
+        {
+            'class': 'indicator_circle'
+        });
+        indicatorCircle.style.backgroundColor = habits[i].color;
         expand_form.appendChild(expand);
         divka.appendChild(btn);
+        divka.appendChild(indicatorCircle);
         divka.appendChild(delete_button);
         divka.appendChild(expand_form);
         divka.appendChild(edit_button);
