@@ -41,7 +41,7 @@ export function renderAreaChart (collection: Collection[], habits: Habits[], two
                     cnt  += collection[k].datapoint;
                 }
             }
-        totalIntensity[j] = cnt;
+        totalIntensity[j] = cnt/habits[j].goal;
         cnt = 0;
         }
         data[i] = {

@@ -131,8 +131,11 @@
 
         <form id="send_new_datapoint">
             <input type="text" id="new_datapoint" name="new_datapoint" required>
-            <input type="range" step="5" min="5" max="60" value="5" id="datapoint_range">
-            <p>Value: <output id="datapoint_range_value"></output> minutes</p>
+            <input type="range" step="1" min="0" max="100" value="5" id="datapoint_range">
+            <div class = units_range>
+                Value: <output id="datapoint_range_value"></output>
+                <div class = "units_name"></div>
+            </div>
             <br>
             <input type="submit" value="Submit">
         </form>

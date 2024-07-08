@@ -10,12 +10,14 @@ import {
 import {renderDatapoints} from "./render_remove_datapoint";
 import { getTwoWeeksDates, renderAreaChart } from './render_graph';
 
-function Choice_habit(habit: string) {
+function Choice_habit(habit: string, unit: string) {
     updateHabitname(habit);
     const table = document.getElementById("table")!;
     while (table.hasChildNodes()) {
         table.removeChild(table.firstChild!);
     }
+    var units_name = document.querySelector('.units_name') as HTMLElement;
+    units_name.innerText = " " + unit;
     //renderDatapoints(collection, habitname);
 }
 
@@ -209,7 +211,7 @@ export function renderHabits(habits: Habits[]) {
             const old = document.querySelector(".habitname.currently_selected");
                 if(old !== null){old.className = "habitname";}
                 ((ev.target as Element).className) = "habitname currently_selected";
-            Choice_habit(habits[i].habit);
+            Choice_habit(habits[i].habit, habits[i].unit);
         });
 
         btn.innerHTML = habits[i].habit;

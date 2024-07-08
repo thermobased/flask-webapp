@@ -235,6 +235,13 @@
     height: 30%;
 }
 
+.units_range{
+    display: flex;
+}
+.units_name{
+    padding-left: 10px;
+}
+
 @keyframes animate{ 
     0%{ 
       opacity: 0.1; 
