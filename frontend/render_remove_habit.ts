@@ -32,11 +32,168 @@ export function renderHabits(habits: Habits[]) {
 
         return el;
     }
+
+
+    function renderEditDialog(habit: Habits){
+
+        var dialogContainer = document.querySelector(".edit_dialog_container") as HTMLElement;
+        dialogContainer.innerHTML = '';
+
+        let div1 = createElementWithAttributes("div",
+        {
+            'class': 'input_divs',
+        }
+        );
+        let div2 = createElementWithAttributes("div",
+        {
+            'class': 'input_divs',
+        }
+        );
+        let div3 = createElementWithAttributes("div",
+        {
+            'class': 'input_divs',
+        }
+        );
+        let div4 = createElementWithAttributes("div",
+        {
+            'class': 'input_divs',
+        }
+        );
+
+        let dialog = createElementWithAttributes("dialog",
+        {
+            'class': 'edit_dialog',
+        }
+        );
+        let form = createElementWithAttributes("form",
+        {
+            'id': 'edit_habit_form'
+        }
+        );
+        form.innerText = 'Edit habit';
+
+        let input1 = createElementWithAttributes("input",
+        {
+            'type': 'text',
+            'class': 'edit_habit',
+            'id': 'edit_habit',
+            'value': habit.habit,
+            'name': 'edit_habit'
+        }
+        );
+        let label1 = createElementWithAttributes("label",
+        {
+            'for': 'input_habit',
+        }
+        );
+        label1.innerHTML = "Habit name: ";
+        let input2 = createElementWithAttributes("input",
+        {
+            'type': 'text',
+            'class': 'edit_habit_unit',
+            'id': 'edit_habit_unit',
+            'value': habit.unit,
+            'name': 'edit_unit'
+        }
+        );
+        let label2 = createElementWithAttributes("label",
+        {
+            'for': 'input_unit',
+        }
+        );
+        label2.innerHTML = "Units: ";
+        let input3 = createElementWithAttributes("input",
+                {
+                    'type': 'text',
+                    'class': 'edit_habit_goal',
+                    'id': 'edit_habit_goal',
+                    'value': habit.goal.toString(),
+                    'name': 'edit_goal'
+                }
+            );
+        let label3 = createElementWithAttributes("label",
+        {
+            'for': 'input_goal',
+        }
+        );
+        label3.innerHTML = "Daily Goal: ";
+        let input4 = createElementWithAttributes("input",
+            {
+                'type': 'color',
+                'class': 'edit_habit_color',
+                'id': 'edit_habit_color',
+                'value': habit.color,
+                'name': 'edit_color'
+            }
+        );
+        let label4 = createElementWithAttributes("label",
+        {
+            'for': 'input_color',
+        }
+        );
+        label4.innerHTML = "Color: ";
+
+        let input5 = createElementWithAttributes("input",
+            {
+                'type': 'hidden',
+                'value': habit.id,
+                'name': 'edit_id'
+            }
+        );
+
+        let submit = createElementWithAttributes("input",
+            {
+                'type': 'button',
+                'value': 'Edit'
+            }
+        );
+        submit.addEventListener("click", (ev) => {
+            editHabit();
+            });
+
+        let close = createElementWithAttributes("button",
+        {
+            'type': 'button',
+            'class': 'close_button'
+        }
+        );
+        close.innerHTML = 'Close';
+        close.addEventListener("click", (ev) => {
+            dialog.close();
+            });
+        let container = createElementWithAttributes("div",
+        {
+            'class': 'dialog_container'
+        }
+        );
+        container.appendChild(close);
+        div1.appendChild(label1);
+        div1.appendChild(input1);
+        div2.appendChild(label2);
+        div2.appendChild(input2);
+        div3.appendChild(label3);
+        div3.appendChild(input3);
+        div4.appendChild(label4);
+        div4.appendChild(input4);
+        div4.appendChild(input5);
+        form.appendChild(div1);
+        form.appendChild(div2);
+        form.appendChild(div3);
+        form.appendChild(div4);
+        form.appendChild(submit);
+        container.appendChild(form);
+        dialog.appendChild(container);
+        dialogContainer.appendChild(dialog);
+        dialog.showModal();
+    }
+
+
     var div2 = document.querySelector("#habit_selector")!;
     div2.innerHTML = "";
     
 
     for (let i = 0; i < habits.length; i++) {
+
         var divka = createElementWithAttributes("div", {
             'class': 'habit_container'
         });
@@ -93,7 +250,7 @@ export function renderHabits(habits: Habits[]) {
         );
         edit_button.innerHTML = 'Edit';
         edit_button.addEventListener('click', (ev) => {
-            alert('in development');
+            renderEditDialog(habits[i]);
         });
         let indicatorCircle = createElementWithAttributes("span",
         {
@@ -162,6 +319,48 @@ export async function removeHabit(deleteValue: string): Promise<void> {
         }
     }
 }
+
+export async function editHabit(): Promise<void> {
+        var editForm = document.querySelector('#edit_habit_form') as HTMLFormElement;
+        const formData = new FormData(editForm);
+        console.log(formData);
+        const container = document.querySelector(".edit_dialog") as HTMLDialogElement;
+
+        let obj: { [key: string]: FormDataEntryValue } = {};
+        formData.forEach((value, key) => obj[key] = value);
+
+        var loadingIndicator = document.createElement("div");
+        loadingIndicator.id = "loading_indicator"
+        container.appendChild(loadingIndicator);
+
+        try {
+            const response = await fetch("/api/edit_habit", {
+                method: 'POST',
+                body: JSON.stringify(obj),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            var x = await response.json();
+            console.log(x);
+            if (x.status == 'ok') {
+                updateCollection(x.collection);
+                updateHabits(x.habits);
+                renderHabits(habits);
+                eraseDatapoints();
+                renderAreaChart(collection, habits, getTwoWeeksDates());
+            } else {
+                console.log(`editHabit: server responded with ${JSON.stringify(x)}`);
+            }
+        } catch (e) {
+            console.error(`seditHabit: got exception ${e}`);
+        } finally {
+            loadingIndicator.remove();
+        }
+    }
+
+
+
 
 export async function sendNewHabit() {
     var newHabit = document.getElementById("send_new_habit") as HTMLFormElement;

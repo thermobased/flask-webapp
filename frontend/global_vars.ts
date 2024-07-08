@@ -7,6 +7,7 @@ export type Collection = {
 }
 
 export type Habits = {
+  id: string
   habit: string
   unit: string
   goal: number

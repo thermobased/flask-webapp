@@ -11,7 +11,7 @@ CREATE TABLE sessions (
 );
 
 CREATE TABLE habits (
-  id INTEGER PRIMARY KEY,
+  id TEXT UNIQUE,
   login TEXT,
   habit TEXT,
   unit TEXT,

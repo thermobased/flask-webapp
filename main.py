@@ -76,15 +76,16 @@ def get_collection(user: str):
 def get_habits(user: str) -> list[str]:
     con = get_db()
     cur = con.cursor()
-    n = cur.execute("SELECT habit, unit, goal, color FROM habits WHERE login = ? ", (user,))
+    n = cur.execute("SELECT id, habit, unit, goal, color FROM habits WHERE login = ? ", (user,))
     habits = n.fetchall()
     new_habits = []
     for i in habits:
             j = {
-                "habit": i[0],
-                "unit": i[1],
-                "goal": i[2],
-                "color": i[3]
+                "id": i[0],
+                "habit": i[1],
+                "unit": i[2],
+                "goal": i[3],
+                "color": i[4]
             }
             new_habits.append(j)
     con.commit()
@@ -129,8 +130,9 @@ def new_habit():
     new_habit_unit = request.json.get("new_habit_unit")
     new_habit_goal = request.json.get("new_habit_goal")
     new_habit_color = request.json.get("new_habit_color")
+    new_id = str(random.getrandbits(64))
     try:
-        cur.execute("INSERT INTO habits (login, habit, unit, goal, color) VALUES(?, ?, ?, ?, ?)", (user, new_habit, new_habit_unit, new_habit_goal, new_habit_color))
+        cur.execute("INSERT INTO habits (id, login, habit, unit, goal, color) VALUES(?, ?, ?, ?, ?, ?)", (new_id, user, new_habit, new_habit_unit, new_habit_goal, new_habit_color))
         collection = get_collection(user)
         habits = get_habits(user)
         con.commit()
@@ -201,6 +203,28 @@ def delete_datapoint():
         return jsonify({'status': 'ok', "collection": collection, "habits": habits})
     except IntegrityError as e:
         print("couldn't delete habit!, ", type(e))
+        con.commit()
+        return jsonify({'status': 'error', 'error': str(e)})
+
+
+@app.route("/api/edit_habit", methods=['POST'])
+def edit_habit():
+    con = get_db()
+    cur = con.cursor()
+    user = get_user()
+    edit_habit = request.json.get("edit_habit")
+    edit_unit = request.json.get("edit_unit")
+    edit_goal = request.json.get("edit_goal")
+    edit_color = request.json.get("edit_color")
+    edit_id = request.json.get("edit_id")
+    try:
+        cur.execute("UPDATE habits SET habit = ?, unit = ?, goal = ?, color = ? WHERE login = ? and id = ?", (edit_habit, edit_unit, edit_goal, edit_color, user, edit_id))
+        collection = get_collection(user)
+        habits = get_habits(user)
+        con.commit()
+        return jsonify({'status': 'ok', "collection": collection, "habits": habits})
+    except IntegrityError as e:
+        print("habit already exists!, ", e)
         con.commit()
         return jsonify({'status': 'error', 'error': str(e)})
 
