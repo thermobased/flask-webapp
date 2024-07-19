@@ -32,9 +32,9 @@ function renderYearChart() {
             dayOne = moment(collection[i].occasion, 'YY, M, D');
         }
     }
+    let first_chart_day = dayOne.day();
     dayOne = dayOne.day('Monday');
     number_of_weeks = moment().diff(dayOne, 'weeks') + 1;
-    let first_chart_day = dayOne.day();
 
     const year_chart = document.querySelector('#year_chart') as HTMLElement;
     year_chart.addEventListener('wheel', (event) => {
