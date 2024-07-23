@@ -356,7 +356,7 @@ export async function editHabit(): Promise<void> {
                 eraseDatapoints();
                 renderAreaChart(collection, habits, getTwoWeeksDates());
             } else {
-                console.log(`editHabit: server responded with ${JSON.stringify(x)}`);
+                alert("Habit with this name already exists!");
             }
         } catch (e) {
             console.error(`seditHabit: got exception ${e}`);
@@ -396,7 +396,7 @@ export async function sendNewHabit() {
             renderHabits(habits);
             renderAreaChart(collection, habits, getTwoWeeksDates());
         } else {
-            console.log(`sendNewHabit: server responded with ${JSON.stringify(x)}`);
+            alert("Habit with this name already exists!");
         }
     } catch (e) {
         console.error(`sendNewHabit: got exception ${e}`);
