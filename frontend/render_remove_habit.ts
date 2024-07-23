@@ -207,6 +207,10 @@ export function renderHabits(habits: Habits[]) {
                 'value': habits[i].habit
             }
         );
+        if(i==0){
+            updateHabitname(habits[i].habit);
+            btn.className = "habitname currently_selected"
+        }
         btn.addEventListener('click', (ev) => {
             const old = document.querySelector(".habitname.currently_selected");
                 if(old !== null){old.className = "habitname";}

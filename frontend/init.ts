@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { collection, habits, habitname, chosenDate, updateChosenDate, updateCollection, updateHabits } from './global_vars';
+import { collection, habits, habitname, chosenDate, updateChosenDate, updateCollection, updateHabits, updateHabitname } from './global_vars';
 import { renderCalendar } from './render_calendar';
 import { addDatapointRangeSlider, renderHabits, sendNewHabit } from './render_remove_habit';
 import { removeDatapoint, sendNewDatapoint } from './render_remove_datapoint';
