@@ -1,5 +1,5 @@
 import {renderDatapoints} from "./render_remove_datapoint";
-import { Habits, collection, habits, updateCollection } from './global_vars';
+import { Habits, collection, habitname, habits, updateCollection } from './global_vars';
 import moment, {Moment, MomentFormatSpecification} from "moment";
 import { addDatapointRangeSlider } from "./render_remove_habit";
 
@@ -12,6 +12,14 @@ function removeAllChildNodes(parent: HTMLElement) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
+}
+function displayPopup(id: string){
+    let node = document.getElementById(id) as HTMLSpanElement;
+    node.style.visibility = 'visible';
+}
+function hidePopup(id: string){
+    let node = document.getElementById(id) as HTMLSpanElement;
+    node.style.visibility = 'hidden';
 }
 
 function createElementWithAttributes<K extends keyof HTMLElementTagNameMap>
@@ -63,8 +71,10 @@ function renderYearChart() {
         for(let j = 0; j<number_of_weeks; j++){                     // columns -- weeks
             var table_data = createElementWithAttributes("td", {
                 'class': 'expand_table_cell',
-                'id': dayOne.add(j, 'weeks').format('YY, M, D'),
+                'id': dayOne.add(j, 'weeks').format('YY, M, D').concat(' cell'),
             });
+            
+            
 
             var cnt = 0;
             for(let k = 0; k<collection.length; k++){
@@ -74,21 +84,34 @@ function renderYearChart() {
                 if(cnt/expand_habit.goal > 0 && cnt/expand_habit.goal < 0.3){table_data.style.backgroundColor = '#86db98';}
                 else if(cnt/expand_habit.goal > 0.3 && cnt/expand_habit.goal < 0.6){table_data.style.backgroundColor = '#47a15a';}
                 else if(cnt/expand_habit.goal > 0.6){table_data.style.backgroundColor = '#156125';}
-                cnt = 0;
             }
-            
+            let id: string = dayOne.format('D, M, YY');
+            var popup_data = createElementWithAttributes("span", {
+                'class': 'chart_popup',
+                'id': id
+            });
+            popup_data.style.visibility = 'hidden';
+            popup_data.style.zIndex = '999';
+            if(i>=4){popup_data.style.top = '-25px';}
+
+            popup_data.innerHTML = dayOne.format('MMMM, Do').concat(" - ", cnt.toString(), ' ', expand_habit.unit);
             table_data.addEventListener("click", (ev) => {
                 renderDatapoints(collection, expand_habit.habit, (ev.target as HTMLTableCellElement).id);
                 });
-            var popup = createElementWithAttributes("span", {
-                'class': 'year_chart_popup'
-            });
-            popup.innerHTML = dayOne.format('MMMM, Do').concat(" - ", cnt.toString());
-            table_data.appendChild(popup);
-
+            table_data.addEventListener('mouseenter',
+                () => {
+                    displayPopup(id);
+                });
+            table_data.addEventListener('mouseleave',
+                () => {
+                    hidePopup(id);
+                });
+            table_data.appendChild(popup_data);
+            table_row.appendChild(table_data);
+            
             dayOne.subtract(j, 'weeks');
 
-            table_row.appendChild(table_data);
+
         }
         dayOne.subtract(i, 'days');
         table_body.appendChild(table_row);
@@ -128,11 +151,6 @@ function renderYearChart() {
         table_head.appendChild(month);
         dayOne.add(1, 'months');
     }
-/* 
-    for(let i = 0; i <= 7; i++){
-        
-    } */
-
 
     table.appendChild(table_body);
     table.appendChild(table_head);
