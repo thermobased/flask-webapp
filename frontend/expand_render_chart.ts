@@ -1,10 +1,11 @@
 import {renderDatapoints} from "./render_remove_datapoint";
-import { collection, habits, updateCollection } from './global_vars';
+import { Habits, collection, habits, updateCollection } from './global_vars';
 import moment, {Moment, MomentFormatSpecification} from "moment";
 import { addDatapointRangeSlider } from "./render_remove_habit";
 
-var expand_habit: string = '';
+var expand_habit: Habits;
 var dayOne: Moment = moment();
+let firstOfMonth: Moment = moment();
 var number_of_weeks: number;
 var nodeid: string = 'expand_table';
 function removeAllChildNodes(parent: HTMLElement) {
@@ -25,27 +26,121 @@ function createElementWithAttributes<K extends keyof HTMLElementTagNameMap>
     }
 
 function renderYearChart() {
-    console.log(collection, "< -- initial chart collection value");
-
-    for(let i = 0; i<collection.length; i++){
-        if(moment(collection[i].occasion, 'YY, M, D').isBefore(dayOne)){
-            dayOne = moment(collection[i].occasion, 'YY, M, D');
-        }
-    }
-    let first_chart_day = dayOne.day();
-    dayOne = dayOne.day('Monday');
-    number_of_weeks = moment().diff(dayOne, 'weeks') + 1;
 
     const year_chart = document.querySelector('#year_chart') as HTMLElement;
+    const container = document.querySelector('#year_chart_container') as HTMLElement;
+    var table = document.querySelector("#year_chart_table") as HTMLTableElement;
     year_chart.addEventListener('wheel', (event) => {
         event.preventDefault();
         year_chart.scrollBy({
           left: event.deltaY < 0 ? -30 : 30,
         });
       });
+
+    var table_head = createElementWithAttributes("thead", {
+    });
+    var table_body = createElementWithAttributes("tbody", {
+    });
+
+    for(let i = 0; i<collection.length; i++){
+        if(moment(collection[i].occasion, 'YY, M, D').isBefore(dayOne)){
+            dayOne = moment(collection[i].occasion, 'YY, M, D');
+            firstOfMonth = moment(collection[i].occasion, 'YY, M, D');
+        }
+    }
+    dayOne = dayOne.day('Monday');
+    if(collection.length == 0){
+        dayOne.subtract(1, 'weeks');
+    }
+
+    number_of_weeks = moment().diff(dayOne, 'weeks') + 1;
+    if(number_of_weeks == 1){number_of_weeks++;}
+
+    for(let i = 0; i<7; i++){                                       // 7 rows
+        var table_row = createElementWithAttributes("tr", {
+        });
+        dayOne.add(i, 'days');
+        for(let j = 0; j<number_of_weeks; j++){                     // columns -- weeks
+            var table_data = createElementWithAttributes("td", {
+                'class': 'expand_table_cell',
+                'id': dayOne.add(j, 'weeks').format('YY, M, D'),
+            });
+
+            var cnt = 0;
+            for(let k = 0; k<collection.length; k++){
+                if(collection[k].occasion == dayOne.format('YY, M, D')){
+                    cnt+=collection[k].datapoint;
+                }
+                if(cnt/expand_habit.goal > 0 && cnt/expand_habit.goal < 0.3){table_data.style.backgroundColor = '#86db98';}
+                else if(cnt/expand_habit.goal > 0.3 && cnt/expand_habit.goal < 0.6){table_data.style.backgroundColor = '#47a15a';}
+                else if(cnt/expand_habit.goal > 0.6){table_data.style.backgroundColor = '#156125';}
+                cnt = 0;
+            }
+            
+            table_data.addEventListener("click", (ev) => {
+                renderDatapoints(collection, expand_habit.habit, (ev.target as HTMLTableCellElement).id);
+                });
+            var popup = createElementWithAttributes("span", {
+                'class': 'year_chart_popup'
+            });
+            popup.innerHTML = dayOne.format('MMMM, Do').concat(" - ", cnt.toString());
+            table_data.appendChild(popup);
+
+            dayOne.subtract(j, 'weeks');
+
+            table_row.appendChild(table_data);
+        }
+        dayOne.subtract(i, 'days');
+        table_body.appendChild(table_row);
+    }
+    
+    var number_of_months = moment().diff(dayOne, 'months');
+    
+    firstOfMonth.subtract(firstOfMonth.date()-1, 'days');
+
+    var first_weeeks = dayOne.diff(firstOfMonth.add(1, 'month'), 'weeks');
+    first_weeeks *= -1;
+    if(first_weeeks < 2){first_weeeks = 2;}
+    dayOne.subtract(dayOne.date()-1, 'days');
+    firstOfMonth.subtract(1, 'month');
+    for(let i = 0; i<=number_of_months; i++){
+
+        let daysdiff = dayOne.diff(firstOfMonth.add(1, 'months'), 'days');
+
+        daysdiff *= -1;
+        let month = createElementWithAttributes("td", {
+            'class': '',
+        });
+
+        if(i!=0 && i !=number_of_months){
+        if(daysdiff-28+firstOfMonth.day() <= dayOne.day() && daysdiff-28+firstOfMonth.day()!= 0){
+            month.colSpan = 5;
+        } else {
+            month.colSpan = 4;    
+        }
+        }else if (i == 0){
+            month.colSpan = first_weeeks;
+        } else if (i == number_of_months){
+            month.colSpan = moment().date()/7;
+        }
+        
+        month.innerHTML = dayOne.format('MMM');
+        table_head.appendChild(month);
+        dayOne.add(1, 'months');
+    }
+/* 
+    for(let i = 0; i <= 7; i++){
+        
+    } */
+
+
+    table.appendChild(table_body);
+    table.appendChild(table_head);
+
+
       
     
-    for(let i = 0; i<number_of_weeks; i++){
+/*     for(let i = 0; i<number_of_weeks; i++){
 
         var week = createElementWithAttributes("div", {
             'class': 'chart_week'
@@ -103,7 +198,7 @@ function renderYearChart() {
         }
         for(let i = moment().day(); i<7; i++){
             lastWeek.removeChild(lastWeek.lastChild!);
-    }
+    } */
 
     }
     
@@ -115,8 +210,6 @@ window.addEventListener("load", (event) => {
     event.preventDefault();
     const ssrCollection = document.getElementById('collection-script')!;
     updateCollection(JSON.parse(ssrCollection.textContent!));
-/*     const ssrHabits = document.getElementById('habits-script')!;
-    updateHabits(JSON.parse(ssrHabits.textContent!)); */
     const ssrHabit_name = document.getElementById('habit_name-script')!;
     expand_habit = (JSON.parse(ssrHabit_name.textContent!));
     renderYearChart();

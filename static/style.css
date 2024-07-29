@@ -255,19 +255,16 @@
   } 
 
 #year_chart_container {
-    position: relative;
+    z-index: 3;
     height: 35vh;
-    width: 100%;
-    overflow: hidden;
+    width: 70vw;
     white-space: nowrap;
+    position: relative;
 }
 
 #year_chart {
-    position: relative;
-    height: auto;
-    display: grid;
-    grid-template-columns: repeat(53, 1fr);
-    overflow: auto;
+    overflow-y: hidden;
+    overflow-x: auto;
     white-space: nowrap;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -289,7 +286,7 @@ div .first_week {
     margin-bottom: 1%;
 }
 
-.chart_day {
+.expand_table_cell {
 
     position: relative;
     border-style: solid;
@@ -301,7 +298,7 @@ div .first_week {
     margin: 1px;
 }
 
-.chart_day .year_chart_popup {
+.expand_table_cell .year_chart_popup {
     z-index: 1;
     position:absolute;
     top:-22px;
@@ -317,7 +314,7 @@ div .first_week {
     opacity:0;
             transition:opacity 250ms ease-out;
 }
-.chart_day .year_chart_popup::before {
+.expand_table_cell .year_chart_popup::before {
     z-index: 1;
     content:' ';
     position:absolute;
@@ -329,7 +326,7 @@ div .first_week {
     border:8px solid transparent;
     border-right-color:#333;
 }
-.chart_day:hover .year_chart_popup {
+.expand_table_cell:hover .year_chart_popup {
     right:-20px;
     opacity:1;
 }

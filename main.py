@@ -270,9 +270,18 @@ def habit_expand():
                 "id": i[3]
             }
             new_collection.append(j)
+        k = cur.execute("SELECT id, habit, unit, goal, color FROM habits WHERE login = ? and habit = ?", (user, habit))
+        x = k.fetchone()
+        expand_habit = {
+                "id": x[0],
+                "habit": x[1],
+                "unit": x[2],
+                "goal": x[3],
+                "color": x[4]
+        }
         con.commit()
         print(new_collection)
-        body = render_template("habit_expand.html", collection=new_collection, habit_name=habit)
+        body = render_template("habit_expand.html", collection=new_collection, habit_name=expand_habit)
         return render_template("main.html", title="expand", body=body, name=user)
 
     except IntegrityError as e:
