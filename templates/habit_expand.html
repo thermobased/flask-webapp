@@ -1,5 +1,17 @@
+<script id="collection-script" type="application/json">
+    {{collection|tojson}}
+  </script>
+
+
 <div>
+    
+    
 
-    <div>{{habit_name}}</div>
-
+    <div id="year_chart_container">
+        <div id="year_chart">
+            <script type="text/javascript" src="{{ url_for('static', filename='js/expand_render_chart.js') }}"></script>
+            
+        </div>
+    </div>
 </div>
+

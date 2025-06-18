@@ -241,3 +241,39 @@
       opacity: 0.1; 
     } 
   } 
+
+#year_chart_container {
+    height: 35vh;
+    width: 100%;
+    
+}
+
+#year_chart {
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+}
+
+div .first_week {
+    justify-content: flex-end;
+}
+
+.chart_week {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.chart_day {
+
+    border-style: solid;
+    border-color: white;
+    border-radius: 4px;
+    background-color: rgb(209, 230, 119);
+    padding: 7px;
+
+}
+.chart_week button {
+    font-size: 3px;
+}
