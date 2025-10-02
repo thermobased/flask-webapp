@@ -144,10 +144,15 @@ function renderYearChart() {
         }else if (i == 0){
             month.colSpan = first_weeeks;
         } else if (i == number_of_months){
-            month.colSpan = moment().date()/7;
+            month.colSpan = Math.ceil(moment().date()/7);
         }
         
-        month.innerHTML = dayOne.format('MMM');
+        
+        let month_div = createElementWithAttributes("div", {
+            'class': 'month_div'
+        });
+        month_div.innerHTML = dayOne.format('MMM');
+        month.appendChild(month_div);
         table_head.appendChild(month);
         dayOne.add(1, 'months');
     }

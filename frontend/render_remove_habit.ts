@@ -264,8 +264,8 @@ export function renderHabits(habits: Habits[]) {
         });
         indicatorCircle.style.backgroundColor = habits[i].color;
         expand_form.appendChild(expand);
-        divka.appendChild(btn);
         divka.appendChild(indicatorCircle);
+        divka.appendChild(btn);
         divka.appendChild(delete_button);
         divka.appendChild(expand_form);
         divka.appendChild(edit_button);
